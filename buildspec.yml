@@ -16,5 +16,5 @@ phases:
       - sam validate -t template.yaml
       - sam build
       - sam package --output-template-file packaged.yaml --s3-bucket $S3_ARTIFACTS
-      - sam deploy --template-file packaged.yaml --stack-name twilio-receiver-pipeline --capabilities CAPABILITY_IAM
-      - aws cloudformation describe-stacks --stack-name twilio-receiver-pipeline --query 'Stacks[].Outputs' --output table
+      - sam deploy --template-file packaged.yaml --stack-name twilio-receiver --capabilities CAPABILITY_IAM
+      - aws cloudformation describe-stacks --stack-name twilio-receiver --query 'Stacks[].Outputs' --output table
