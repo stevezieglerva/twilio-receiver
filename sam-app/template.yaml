@@ -24,6 +24,15 @@ Resources:
             Path: /hello
             Method: post
 
+  LayerCommon:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: common_layer
+      Description: Domain code for the app
+      ContentUri: common_layer/
+      CompatibleRuntimes:
+        - python3.7
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
