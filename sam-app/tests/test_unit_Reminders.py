@@ -29,6 +29,25 @@ class RemindersUnitTests(unittest.TestCase):
         # Assert
         self.assertEqual(results[0].name, "Take medicine")
 
+    def test_should_send_not_text_if_time_wrong(self):
+        # Arrange
+        config = RemindersConfig()
+        config.add_reminder(
+            "Take medicine",
+            ["09:00", "10:00"],
+        )
+
+        clock = FakeClock("2020-01-01 08:59:59")
+
+        subject = ReminderSender(config, clock)
+
+        # Act
+        results = subject.send_needed_reminder_texts()
+        print(f"test results: {results}")
+
+        # Assert
+        self.assertEqual(len(results), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
