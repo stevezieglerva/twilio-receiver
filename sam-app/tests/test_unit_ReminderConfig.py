@@ -10,7 +10,7 @@ class ReminderConfigUnitTests(unittest.TestCase):
         subject = RemindersConfig()
 
         # Act
-        results = subject.add_reminder(["09:00", "10:00"], "Take medicine")
+        results = subject.add_reminder("Take medicine", ["09:00", "10:00"])
         print(f"test results: {results}")
 
         # Assert
