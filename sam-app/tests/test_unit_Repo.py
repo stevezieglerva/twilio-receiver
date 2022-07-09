@@ -17,6 +17,23 @@ class FakeRepoUnitTests(unittest.TestCase):
         reminder = subject.get_reminder("Take medicine")
         self.assertEqual(reminder.times, ["09:00", "10:00"])
 
+    def test_should_store_reminder_to_update_one_reminder(self):
+        # Arrange
+        subject = FakeRepo()
+        subject.store_reminder(Reminder("Take medicine", ["09:00", "10:00"]))
+        subject.store_reminder(Reminder("Take medicine 2", ["12:00", "13:00"]))
+        subject.store_reminder(Reminder("Take medicine 3", ["15:00", "16:00"]))
+
+        # Act
+        subject.store_reminder(
+            Reminder(name="Take medicine 2", times=["12:00", "13:00"], status="active")
+        )
+
+        # Assert
+        reminder = subject.get_reminder("Take medicine 2")
+        self.assertEqual(reminder.times, ["12:00", "13:00"])
+        self.assertEqual(reminder.status, "active")
+
 
 if __name__ == "__main__":
     unittest.main()

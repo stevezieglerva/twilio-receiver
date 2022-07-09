@@ -22,7 +22,8 @@ class FakeRepo(IStoringReminders):
         self._reminders = []
 
     def store_reminder(self, reminder: str) -> None:
-        self._reminders.append(reminder)
+        other_reminders = [r for r in self._reminders if r.name != reminder.name]
+        self._reminders = other_reminders + [reminder]
 
     def get_reminders(self) -> list:
         return self._reminders
