@@ -1,6 +1,6 @@
 #!/bin/bash
 source venv/bin/activate
-pip install -r requirements.txt
+export PYTHONPATH=sam-app/common_layer/domain
 rm reports/*.*
 
 echo "Args: $1, $2"
