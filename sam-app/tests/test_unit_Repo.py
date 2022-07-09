@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, Mock, PropertyMock, patch
 
-from common_layer.python.domain.Reminders import Reminder
+from common_layer.python.domain.Reminders import Reminder, ReminderStatuses
 from common_layer.python.infrastructure.repository.StorageRepo import FakeRepo
 
 
@@ -26,13 +26,17 @@ class FakeRepoUnitTests(unittest.TestCase):
 
         # Act
         subject.store_reminder(
-            Reminder(name="Take medicine 2", times=["12:00", "13:00"], status="active")
+            Reminder(
+                name="Take medicine 2",
+                times=["12:00", "13:00"],
+                status=ReminderStatuses.ACTIVE,
+            )
         )
 
         # Assert
         reminder = subject.get_reminder("Take medicine 2")
         self.assertEqual(reminder.times, ["12:00", "13:00"])
-        self.assertEqual(reminder.status, "active")
+        self.assertEqual(reminder.status, ReminderStatuses.ACTIVE)
 
 
 if __name__ == "__main__":
