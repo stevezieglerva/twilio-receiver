@@ -2,33 +2,38 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
+import Clock
 import StorageRepo
-from common_layer.python.infrastructure.system.Clock import ITellingTime
 from dateutil.parser import *
+
+import RemindersDTO
 
 
 class ReminderSender:
-    _config: RemindersConfig
-    _clock: ITellingTime
-    # _repo: IStoringReminders
+    _config: RemindersDTO.RemindersConfig
+    _clock: Clock.ITellingTime
+    _repo: StorageRepo.IStoringReminders
 
     def __init__(
-        self, config: RemindersConfig, clock: ITellingTime
-    ):  # , repo: IStoringReminders
+        self,
+        config: RemindersDTO.RemindersConfig,
+        clock: Clock.ITellingTime,
+        repo: StorageRepo.IStoringReminders,
+    ):
 
         self._config = config
         self._clock = clock
-        # self._repo = repo
+        self._repo = repo
 
-    def send_needed_reminder_texts(self) -> List[Reminder]:
+    def send_needed_reminder_texts(self) -> List[RemindersDTO.Reminder]:
         sent_reminders = []
         reminders = self._config.get_reminders()
         for reminder in reminders:
             if self._should_send_text(reminder):
-                updated_reminder = Reminder(
+                updated_reminder = RemindersDTO.Reminder(
                     name=reminder.name,
                     times=reminder.times,
-                    status=ReminderStatuses.ACTIVE,
+                    status=RemindersDTO.ReminderStatuses.ACTIVE,
                     last_sent=self._clock.get_time(),
                     occurences=reminder.occurences + 1,
                 )
