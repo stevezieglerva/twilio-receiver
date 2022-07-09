@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
+from common_layer.python.infrastructure.system.Clock import ITellingTime
+
 
 @dataclass(frozen=True)
 class Reminder:
@@ -24,13 +26,20 @@ class RemindersConfig:
 
 class ReminderSender:
     _config: RemindersConfig
+    _clock: ITellingTime
 
-    def __init__(self, config: RemindersConfig):
+    def __init__(self, config: RemindersConfig, clock: ITellingTime):
         self._config = config
+        self._clock = clock
 
-    def send_needed_reminder_texts(self) -> str:
+    def send_needed_reminder_texts(self) -> List[Reminder]:
+        sent_reminders = []
         reminders = self._config.get_reminders()
         for reminder in reminders:
             if self._should_send_text(reminder):
-                return reminder.name
-        return ""
+                sent_reminders.append(reminder)
+
+        return sent_reminders
+
+    def _should_send_text(self, reminder):
+        return True
