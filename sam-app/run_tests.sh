@@ -1,6 +1,6 @@
 #!/bin/bash
 source venv/bin/activate
-export PYTHONPATH=sam-app/common_layer/domain
+export PYTHONPATH=common_layer/domain:common_layer/python/infrastructure/system
 rm reports/*.*
 
 echo "Args: $1, $2"

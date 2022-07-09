@@ -20,3 +20,17 @@ class RemindersConfig:
 
     def get_reminders(self) -> List[Reminder]:
         return self._reminders
+
+
+class ReminderSender:
+    _config: RemindersConfig
+
+    def __init__(self, config: RemindersConfig):
+        self._config = config
+
+    def send_needed_reminder_texts(self) -> str:
+        reminders = self._config.get_reminders()
+        for reminder in reminders:
+            if self._should_send_text(reminder):
+                return reminder.name
+        return ""
