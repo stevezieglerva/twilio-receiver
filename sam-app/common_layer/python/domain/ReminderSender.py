@@ -37,6 +37,8 @@ class ReminderSender:
                     last_sent=self._clock.get_time(),
                     occurences=reminder.occurences + 1,
                 )
+
+                self._repo.store_reminder(updated_reminder)
                 sent_reminders.append(updated_reminder)
 
         return sent_reminders

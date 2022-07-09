@@ -67,6 +67,26 @@ class RemindersUnitTests(unittest.TestCase):
         self.assertTrue(results[0].last_sent is not None)
         self.assertEqual(results[0].occurences, 1)
 
+    def test_should_save_activated_reminder_in_repo(self):
+        # Arrange
+        config = RemindersDTO.RemindersConfig()
+        config.add_reminder(
+            "Take medicine",
+            ["09:00", "10:00"],
+        )
+
+        clock = Clock.FakeClock("2020-01-01 09:00:01")
+        repo = StorageRepo.FakeRepo()
+        subject = ReminderSender.ReminderSender(config, clock, repo)
+
+        # Act
+        results = subject.send_needed_reminder_texts()
+        print(f"test results: {results}")
+
+        # Assert
+        saved_reminder = repo.get_reminder("Take medicine")
+        self.assertEqual(saved_reminder.status, RemindersDTO.ReminderStatuses.ACTIVE)
+
 
 if __name__ == "__main__":
     unittest.main()
