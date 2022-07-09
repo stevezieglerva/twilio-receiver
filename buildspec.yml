@@ -1,24 +1,20 @@
 version: 0.2
 
-
 phases:
   install:
     runtime-versions:
       python: 3.7
     commands:
-       - echo "Installing ..."
-       - pip install aws-sam-cli
-
+      - echo "Installing ..."
+      - pip install aws-sam-cli
 
   build:
     commands:
-        - export S3_ARTIFACTS=$(aws cloudformation describe-stacks --stack-name special_app-pipeline --query "Stacks[0].Outputs[?OutputKey == 'S3Artifacts'].OutputValue" --output text)
-        - export S3_LUTILS=$(aws cloudformation describe-stacks --stack-name lutils --query "Stacks[0].Outputs[?OutputKey == 'S3ProcessingBucket'].OutputValue" --output text)
-        - printenv | grep S3_ARTIFACTS
-        - cd sam-app
-        - sam validate -t template.yaml
-        - sam build
-        - sam package --output-template-file packaged.yaml --s3-bucket $S3_ARTIFACTS
-        - sam deploy --template-file packaged.yaml --stack-name special_app --capabilities CAPABILITY_IAM --parameter-overrides LutilsBucket=$S3_LUTILS
-        - aws cloudformation describe-stacks --stack-name special_app --query 'Stacks[].Outputs' --output table
-
+      - export S3_ARTIFACTS=$(aws cloudformation describe-stacks --stack-name twilio-receiver-pipeline --query "Stacks[0].Outputs[?OutputKey == 'S3Artifacts'].OutputValue" --output text)
+      - printenv | grep S3_ARTIFACTS
+      - cd sam-app
+      - sam validate -t template.yaml
+      - sam build
+      - sam package --output-template-file packaged.yaml --s3-bucket $S3_ARTIFACTS
+      - sam deploy --template-file packaged.yaml --stack-name special_app --capabilities CAPABILITY_IAM
+      - aws cloudformation describe-stacks --stack-name special_app --query 'Stacks[].Outputs' --output table
