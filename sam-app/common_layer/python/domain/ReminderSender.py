@@ -37,7 +37,7 @@ class ReminderSender:
                     last_sent=self._clock.get_time(),
                     occurences=reminder.occurences + 1,
                 )
-
+                print(f"Sending reminder for '{updated_reminder.name}'")
                 self._repo.store_reminder(updated_reminder)
                 sent_reminders.append(updated_reminder)
 
@@ -47,10 +47,13 @@ class ReminderSender:
         now = self._clock.get_time()
         for reminder_time in reminder.times:
             reminder_time_str = f"{now.year}-{now.month}-{now.day} {reminder_time}"
-            print(f"{reminder_time_str}")
             reminder_time_for_today = parse(reminder_time_str)
-            print(f"{reminder_time_for_today}")
-            print(reminder_time)
-            if now >= reminder_time_for_today:
+            print(
+                f"At {self._clock.get_time()}, reminder is {reminder.status} for {reminder_time_for_today}"
+            )
+            if now >= reminder_time_for_today and reminder.status in [
+                RemindersDTO.ReminderStatuses.INACTIVE,
+                RemindersDTO.ReminderStatuses.ACTIVE,
+            ]:
                 return True
         return False
