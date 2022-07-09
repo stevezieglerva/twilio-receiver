@@ -27,8 +27,9 @@ class ReminderSender:
 
     def send_needed_reminder_texts(self) -> List[RemindersDTO.Reminder]:
         sent_reminders = []
-        reminders = self._config.get_reminders()
+        reminders = self._repo.get_reminders()
         for reminder in reminders:
+            print(f"Checking '{reminder.name}'")
             if self._should_send_text(reminder):
                 updated_reminder = RemindersDTO.Reminder(
                     name=reminder.name,
@@ -37,7 +38,7 @@ class ReminderSender:
                     last_sent=self._clock.get_time(),
                     occurences=reminder.occurences + 1,
                 )
-                print(f"Sending reminder for '{updated_reminder.name}'")
+                print(f"\tSending reminder for '{updated_reminder.name}'")
                 self._repo.store_reminder(updated_reminder)
                 sent_reminders.append(updated_reminder)
 
@@ -49,11 +50,11 @@ class ReminderSender:
             reminder_time_str = f"{now.year}-{now.month}-{now.day} {reminder_time}"
             reminder_time_for_today = parse(reminder_time_str)
             print(
-                f"At {self._clock.get_time()}, reminder is {reminder.status} for {reminder_time_for_today}"
+                f"\tAt {self._clock.get_time()}, reminder is {reminder.status} for {reminder_time_for_today}"
             )
-            if now >= reminder_time_for_today and reminder.status in [
-                RemindersDTO.ReminderStatuses.INACTIVE,
-                RemindersDTO.ReminderStatuses.ACTIVE,
-            ]:
+            if reminder.status == RemindersDTO.ReminderStatuses.DONE:
+                print(f"\tReminder is done. Skipping")
+                return False
+            if now >= reminder_time_for_today:
                 return True
         return False
