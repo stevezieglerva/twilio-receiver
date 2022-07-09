@@ -7,10 +7,17 @@ from dateutil.parser import *
 
 
 @dataclass(frozen=True)
+class ReminderStatuses:
+    INACTIVE: str = "inactive"
+    ACTIVE: str = "active"
+    DONE: str = "done"
+
+
+@dataclass(frozen=True)
 class Reminder:
     name: str
     times: List[str]
-    status: str = ""
+    status: str = ReminderStatuses.INACTIVE
     last_sent: datetime = None
     occurences: int = 0
 
