@@ -7,7 +7,7 @@ from dateutil.parser import *
 class ITellingTime:
     @abstractmethod
     def get_time(self) -> datetime:
-        pass
+        raise NotImplementedError()
 
 
 class FakeClock(ITellingTime):
