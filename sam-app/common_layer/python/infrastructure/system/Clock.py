@@ -16,3 +16,8 @@ class FakeClock(ITellingTime):
 
     def get_time(self):
         return self._time
+
+
+class RealClock(ITellingTime):
+    def get_time(self):
+        return datetime.now()
