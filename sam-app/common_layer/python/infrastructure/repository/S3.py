@@ -80,8 +80,7 @@ class S3(S3Base):
 
 class S3FakeLocal(S3Base):
     def put_object(self, bucket, key, data):
-        key = key.replace("/", "__")
-        filename = f"test_fakes3_integration_{bucket}__{key}"
+        filename = f"test_fakes3_integration_{bucket}__{key.replace('/', '__')}"
         with open(filename, "w") as file:
             file.write(data)
         result = S3Object(
@@ -93,7 +92,7 @@ class S3FakeLocal(S3Base):
         raise NotImplementedError
 
     def get_object(self, bucket, key):
-        filename = f"test_fakes3_integration_{bucket}__{key}"
+        filename = f"test_fakes3_integration_{bucket}__{key.replace('/', '__')}"
         print(f"Reading: {filename}")
         with open(filename, "r") as file:
             return file.read()

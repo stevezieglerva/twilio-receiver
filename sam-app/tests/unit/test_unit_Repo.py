@@ -53,7 +53,7 @@ class S3RepoUnitTests(unittest.TestCase):
     def test_should_get_all_data(self):
         # Arrange
         s3 = S3.S3FakeLocal()
-        subject = StorageRepo.S3Repo("fake--bucket", "testing__", s3)
+        subject = StorageRepo.S3Repo("fake--bucket", "testing", s3)
 
         data = StorageRepo.RemindersDB(
             reminders=[RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])]

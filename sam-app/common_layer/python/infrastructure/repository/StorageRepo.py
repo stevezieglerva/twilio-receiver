@@ -58,7 +58,7 @@ class S3Repo(IStoringReminders):
         self._bucket_name = bucket_name
         self._key_prefix = key_prefix
         self._s3 = s3
-        self._db_key = f"{self._key_prefix}reminders_db.json"
+        self._db_key = f"{self._key_prefix}/reminders_db.json"
 
     def save_reminder(self, reminder: RemindersDTO.Reminder) -> None:
         raise NotImplementedError
@@ -70,6 +70,7 @@ class S3Repo(IStoringReminders):
         raise NotImplementedError
 
     def get_all_data(self) -> RemindersDB:
+        print(f"db_key: {self._db_key}")
         data = self._s3.get_object(self._bucket_name, self._db_key)
         data_json = json.loads(data)
         reminders_list = [RemindersDTO.Reminder(**r) for r in data_json["reminders"]]
