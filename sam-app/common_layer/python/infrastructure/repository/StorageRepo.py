@@ -61,9 +61,14 @@ class S3Repo(IStoringReminders):
         self._db_key = f"{self._key_prefix}/reminders_db.json"
 
     def save_reminder(self, reminder: RemindersDTO.Reminder) -> None:
-        current_reminders = self.get_reminders()
+        reminders_db = self.get_all_data()
+        current_reminders = reminders_db.reminders
         other_reminders = [r for r in current_reminders if r.name != reminder.name]
-        return other_reminders + [reminder]
+        new_reminders = other_reminders + [reminder]
+        new_db = RemindersDB(reminders=new_reminders)
+        data_json = json.dumps(asdict(new_db))
+        self._s3.put_object(self._bucket_name, self._db_key, data_json)
+        print(f"Update DB at self.db_key: {self._db_key}")
 
     def get_reminders(self) -> list:
         reminder_db = self.get_all_data()
@@ -78,7 +83,10 @@ class S3Repo(IStoringReminders):
 
     def get_all_data(self) -> RemindersDB:
         print(f"db_key: {self._db_key}")
-        data = self._s3.get_object(self._bucket_name, self._db_key)
+        try:
+            data = self._s3.get_object(self._bucket_name, self._db_key)
+        except FileNotFoundError:
+            return RemindersDB(reminders=[])
         data_json = json.loads(data)
         reminders_list = [RemindersDTO.Reminder(**r) for r in data_json["reminders"]]
         return RemindersDB(reminders=reminders_list)
