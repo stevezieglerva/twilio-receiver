@@ -18,7 +18,7 @@ class RemindersUnitTests(unittest.TestCase):
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
-        repo.store_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
+        repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
         subject = ReminderSender.ReminderSender(config, clock, repo)
 
         # Act
@@ -38,7 +38,7 @@ class RemindersUnitTests(unittest.TestCase):
 
         clock = Clock.FakeClock("2020-01-01 08:59:59")
         repo = StorageRepo.FakeRepo()
-        repo.store_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
+        repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
         subject = ReminderSender.ReminderSender(config, clock, repo)
 
         # Act
@@ -58,7 +58,7 @@ class RemindersUnitTests(unittest.TestCase):
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
-        repo.store_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
+        repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
         subject = ReminderSender.ReminderSender(config, clock, repo)
 
         # Act
@@ -80,7 +80,7 @@ class RemindersUnitTests(unittest.TestCase):
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
-        repo.store_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
+        repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
         subject = ReminderSender.ReminderSender(config, clock, repo)
 
         # Act
@@ -101,7 +101,7 @@ class RemindersUnitTests(unittest.TestCase):
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
-        repo.store_reminder(
+        repo.save_reminder(
             RemindersDTO.Reminder(
                 "Take medicine",
                 ["09:00", "10:00"],

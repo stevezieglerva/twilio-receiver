@@ -39,7 +39,7 @@ class ReminderSender:
                     occurences=reminder.occurences + 1,
                 )
                 print(f"\tSending reminder for '{updated_reminder.name}'")
-                self._repo.store_reminder(updated_reminder)
+                self._repo.save_reminder(updated_reminder)
                 sent_reminders.append(updated_reminder)
 
         return sent_reminders

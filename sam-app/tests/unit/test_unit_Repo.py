@@ -11,7 +11,7 @@ class FakeRepoUnitTests(unittest.TestCase):
         subject = StorageRepo.FakeRepo()
 
         # Act
-        subject.store_reminder(
+        subject.save_reminder(
             RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
         )
 
@@ -22,18 +22,18 @@ class FakeRepoUnitTests(unittest.TestCase):
     def test_should_store_reminder_to_update_one_reminder(self):
         # Arrange
         subject = StorageRepo.FakeRepo()
-        subject.store_reminder(
+        subject.save_reminder(
             RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
         )
-        subject.store_reminder(
+        subject.save_reminder(
             RemindersDTO.Reminder("Take medicine 2", ["12:00", "13:00"])
         )
-        subject.store_reminder(
+        subject.save_reminder(
             RemindersDTO.Reminder("Take medicine 3", ["15:00", "16:00"])
         )
 
         # Act
-        subject.store_reminder(
+        subject.save_reminder(
             RemindersDTO.Reminder(
                 name="Take medicine 2",
                 times=["12:00", "13:00"],
