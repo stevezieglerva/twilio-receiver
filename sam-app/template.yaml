@@ -16,7 +16,7 @@ Parameters:
     AllowedValues:
       - test
       - prod
-    Description:
+    Description: Environment prefix for stack resources
 
 Resources:
   HelloWorldFunction:
