@@ -56,16 +56,6 @@ class S3RepoUnitTests(unittest.TestCase):
         s3 = S3.S3FakeLocal()
         subject = StorageRepo.S3Repo("fake--bucket", "unit_testing", s3)
 
-        data = StorageRepo.RemindersDB(
-            reminders=[RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])]
-        )
-        print(asdict(data))
-        s3.put_object(
-            "fake--bucket",
-            "unit_testing/reminders_db.json",
-            json.dumps(asdict(data), indent=3, default=str),
-        )
-
         # Act
         results = subject.get_all_data()
 
