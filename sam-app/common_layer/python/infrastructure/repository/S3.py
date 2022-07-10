@@ -77,6 +77,11 @@ class S3(S3Base):
             s3_results.append(file)
         return s3_results
 
+    def get_object(self, bucket, key):
+        s3 = boto3.client("s3")
+        response = s3.get_object(Bucket=bucket, Key=key)
+        return response["Body"].read()
+
 
 class S3FakeLocal(S3Base):
     def put_object(self, bucket, key, data):

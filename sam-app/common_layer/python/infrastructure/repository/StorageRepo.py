@@ -1,15 +1,18 @@
 import json
 from abc import ABC, abstractclassmethod
 from dataclasses import asdict, dataclass
+from datetime import date, datetime
 from typing import List
 
 import RemindersDTO
+from dateutil.parser import *
 
 import S3
 
 
 @dataclass(frozen=True)
 class RemindersDB:
+    db_last_update: datetime
     reminders: List[RemindersDTO.Reminder]
 
 
@@ -49,7 +52,10 @@ class FakeRepo(IStoringReminders):
         return None
 
     def get_all_data(self) -> RemindersDB:
-        return RemindersDB(field="fake", reminders=self._reminders)
+        print("Getting fake all data")
+        return RemindersDB(
+            db_last_update=datetime.now().isoformat(), reminders=self._reminders
+        )
 
 
 class S3Repo(IStoringReminders):
@@ -65,7 +71,9 @@ class S3Repo(IStoringReminders):
         current_reminders = reminders_db.reminders
         other_reminders = [r for r in current_reminders if r.name != reminder.name]
         new_reminders = other_reminders + [reminder]
-        new_db = RemindersDB(reminders=new_reminders)
+        new_db = RemindersDB(
+            db_last_update=datetime.now().isoformat(), reminders=new_reminders
+        )
         data_json = json.dumps(asdict(new_db))
         self._s3.put_object(self._bucket_name, self._db_key, data_json)
         print(f"Update DB at self.db_key: {self._db_key}")
@@ -85,8 +93,12 @@ class S3Repo(IStoringReminders):
         print(f"db_key: {self._db_key}")
         try:
             data = self._s3.get_object(self._bucket_name, self._db_key)
-        except FileNotFoundError:
-            return RemindersDB(reminders=[])
+        except Exception as e:
+            print(f"Did get exception {e} but could be OK if DB never created")
+            return RemindersDB(db_last_update=None, reminders=[])
+
         data_json = json.loads(data)
         reminders_list = [RemindersDTO.Reminder(**r) for r in data_json["reminders"]]
-        return RemindersDB(reminders=reminders_list)
+        return RemindersDB(
+            db_last_update=parse(data_json["db_last_update"]), reminders=reminders_list
+        )
