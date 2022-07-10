@@ -53,7 +53,7 @@ class S3RepoUnitTests(unittest.TestCase):
     def test_should_get_all_data(self):
         # Arrange
         s3 = S3.S3FakeLocal()
-        subject = StorageRepo.S3Repo("fake--bucket", "testing", s3)
+        subject = StorageRepo.S3Repo("fake--bucket", "unit_testing", s3)
 
         data = StorageRepo.RemindersDB(
             reminders=[RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])]
@@ -61,7 +61,7 @@ class S3RepoUnitTests(unittest.TestCase):
         print(asdict(data))
         s3.put_object(
             "fake--bucket",
-            "testing/reminders_db.json",
+            "unit_testing/reminders_db.json",
             json.dumps(asdict(data), indent=3, default=str),
         )
 
@@ -70,6 +70,20 @@ class S3RepoUnitTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(results.reminders[0].name, "Take medicine")
+
+    def test_should_store_reminder(self):
+        # Arrange
+        s3 = S3.S3FakeLocal()
+        subject = StorageRepo.S3Repo("fake--bucket", "unit_testing", s3)
+
+        # Act
+        subject.save_reminder(
+            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
+        )
+
+        # Assert
+        reminder = subject.get_reminder("Take medicine")
+        self.assertEqual(reminder.times, ["09:00", "10:00"])
 
 
 if __name__ == "__main__":

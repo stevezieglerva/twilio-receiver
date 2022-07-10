@@ -61,13 +61,20 @@ class S3Repo(IStoringReminders):
         self._db_key = f"{self._key_prefix}/reminders_db.json"
 
     def save_reminder(self, reminder: RemindersDTO.Reminder) -> None:
-        raise NotImplementedError
+        current_reminders = self.get_reminders()
+        other_reminders = [r for r in current_reminders if r.name != reminder.name]
+        return other_reminders + [reminder]
 
     def get_reminders(self) -> list:
-        raise NotImplementedError
+        reminder_db = self.get_all_data()
+        return reminder_db.reminders
 
     def get_reminder(self, name: str) -> RemindersDTO.Reminder:
-        raise NotImplementedError
+        reminders = self.get_reminders()
+        for reminder in reminders:
+            if reminder.name == name:
+                return reminder
+        return None
 
     def get_all_data(self) -> RemindersDB:
         print(f"db_key: {self._db_key}")
