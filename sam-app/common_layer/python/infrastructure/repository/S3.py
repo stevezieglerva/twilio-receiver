@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from collections import namedtuple
 from datetime import datetime
 
-
 import boto3
 
 S3Object = namedtuple("S3Object", "bucket key date size")
@@ -18,6 +17,10 @@ class S3Base(ABC):
 
     @abstractmethod
     def list_objects(self, bucket, prefix, total_max=0):
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_object(self, bucket, key):
         raise NotImplementedError
 
 
@@ -88,3 +91,9 @@ class S3FakeLocal(S3Base):
 
     def list_objects(self, bucket, prefix, total_max=0):
         raise NotImplementedError
+
+    def get_object(self, bucket, key):
+        filename = f"test_fakes3_integration_{bucket}__{key}"
+        print(f"Reading: {filename}")
+        with open(filename, "r") as file:
+            return file.read()

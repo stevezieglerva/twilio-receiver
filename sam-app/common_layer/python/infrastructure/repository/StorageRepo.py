@@ -1,8 +1,16 @@
+import json
 from abc import ABC, abstractclassmethod
+from dataclasses import asdict, dataclass
+from typing import List
 
 import RemindersDTO
 
 import S3
+
+
+@dataclass(frozen=True)
+class RemindersDB:
+    reminders: List[RemindersDTO.Reminder]
 
 
 class IStoringReminders(ABC):
@@ -16,6 +24,10 @@ class IStoringReminders(ABC):
 
     @abstractclassmethod
     def get_reminder(self, name: str) -> RemindersDTO.Reminder:
+        raise NotImplementedError()
+
+    @abstractclassmethod
+    def get_all_data(self) -> RemindersDB:
         raise NotImplementedError()
 
 
@@ -36,12 +48,17 @@ class FakeRepo(IStoringReminders):
                 return reminder
         return None
 
+    def get_all_data(self) -> RemindersDB:
+        return RemindersDB(field="fake", reminders=self._reminders)
+
 
 class S3Repo(IStoringReminders):
-    def __init__(self, bucket_name: str, key_prefix: str):
+    def __init__(self, bucket_name: str, key_prefix: str, s3: S3):
         self._reminders = []
         self._bucket_name = bucket_name
         self._key_prefix = key_prefix
+        self._s3 = s3
+        self._db_key = f"{self._key_prefix}reminders_db.json"
 
     def save_reminder(self, reminder: RemindersDTO.Reminder) -> None:
         raise NotImplementedError
@@ -51,3 +68,9 @@ class S3Repo(IStoringReminders):
 
     def get_reminder(self, name: str) -> RemindersDTO.Reminder:
         raise NotImplementedError
+
+    def get_all_data(self) -> RemindersDB:
+        data = self._s3.get_object(self._bucket_name, self._db_key)
+        data_json = json.loads(data)
+        reminders_list = [RemindersDTO.Reminder(**r) for r in data_json["reminders"]]
+        return RemindersDB(reminders=reminders_list)
