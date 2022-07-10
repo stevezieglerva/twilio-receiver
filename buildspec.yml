@@ -13,6 +13,7 @@ phases:
       - export S3_ARTIFACTS=$(aws cloudformation describe-stacks --stack-name twilio-receiver-pipeline --query "Stacks[0].Outputs[?OutputKey == 'S3Artifacts'].OutputValue" --output text)
       - printenv | grep S3_ARTIFACTS
       - cd sam-app
+      - ls
       - . ./run_tests.sh
       - sam validate -t template.yaml
       - sam build
