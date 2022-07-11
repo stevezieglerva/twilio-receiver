@@ -1,6 +1,8 @@
 import json
 import os
 
+print(os.environ["PYTHONPATH"])
+
 import Clock
 import RemindersDTO
 import ReminderSender
