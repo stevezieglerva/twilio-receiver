@@ -18,20 +18,11 @@ Parameters:
       - prod
     Description: Environment prefix for stack resources
 
-Conditions:
-  CreateProdResources: !Equals
-    - !Ref StackNamePrefix
-    - prod
-  CreateTestResources: !Equals
-    - !Ref StackNamePrefix
-    - test
-
 Resources:
-  HelloWorldFunction:
+  TwilioWebHookFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Condition: CreateProdResources
     Properties:
-      FunctionName: !Sub "Twilio-${StackNamePrefix}"
+      FunctionName: !Sub "twilio-webhook-${StackNamePrefix}"
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: python3.7
@@ -44,7 +35,6 @@ Resources:
 
   SendRemindersTestFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Condition: CreateTestResources
     Properties:
       FunctionName: !Sub "twilio-send-reminders-${StackNamePrefix}"
       CodeUri: send_scheduled_reminders/
@@ -56,7 +46,7 @@ Resources:
   LayerCommon:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: common_layer
+      LayerName: !Sub "twilio-common--${StackNamePrefix}"
       Description: Domain code for the app
       ContentUri: common_layer/
       CompatibleRuntimes:
@@ -69,12 +59,9 @@ Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
+  TwilioWebHookApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
+  TwilioWebHookFunction:
     Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !GetAtt TwilioWebHookFunction.Arn
