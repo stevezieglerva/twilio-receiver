@@ -41,7 +41,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.7
       Environment:
-        S3_BUCKET: !Ref S3Bucket
+        Variables:
+          S3_BUCKET: !Ref S3Bucket
 
   LayerCommon:
     Type: AWS::Serverless::LayerVersion
