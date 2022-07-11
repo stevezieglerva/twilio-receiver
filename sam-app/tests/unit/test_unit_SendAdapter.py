@@ -25,7 +25,7 @@ class SendAdapterUnitTests(unittest.TestCase):
         subject = SendAdapter.SendAdapter(reminder_sender)
 
         # Act
-        results = subject.send_notifications()
+        results = subject.send_reminders()
         print(f"test results: {results}")
 
         # Assert
