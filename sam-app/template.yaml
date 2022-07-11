@@ -43,6 +43,7 @@ Resources:
       Environment:
         Variables:
           S3_BUCKET: !Ref S3Bucket
+          KEY_PREFIX = !Ref StackNamePrefix
 
   LayerCommon:
     Type: AWS::Serverless::LayerVersion
@@ -53,8 +54,7 @@ Resources:
       CompatibleRuntimes:
         - python3.7
 
-  S3Bucket:
-    Type: "AWS::S3::Bucket"
+
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
