@@ -12,9 +12,7 @@ class S3RepoUnitTests(unittest.TestCase):
     def test_should_get_all_data(self):
         # Arrange
         s3 = S3.S3()
-        subject = StorageRepo.S3Repo(
-            "twilio-receiver-s3bucket-1c41a6lxgoksv", "integration_testing_a", s3
-        )
+        subject = StorageRepo.S3Repo("twilio-apps", "integration_testing_a", s3)
 
         # Act
         results = subject.get_all_data()
@@ -25,9 +23,7 @@ class S3RepoUnitTests(unittest.TestCase):
     def test_should_save_reminder(self):
         # Arrange
         s3 = S3.S3()
-        subject = StorageRepo.S3Repo(
-            "twilio-receiver-s3bucket-1c41a6lxgoksv", "integration_testing_b", s3
-        )
+        subject = StorageRepo.S3Repo("twilio-apps", "integration_testing_b", s3)
 
         # Act
         subject.save_reminder(
@@ -41,9 +37,7 @@ class S3RepoUnitTests(unittest.TestCase):
     def test_should_save_reminder_to_update_one_reminder(self):
         # Arrange
         s3 = S3.S3()
-        subject = StorageRepo.S3Repo(
-            "twilio-receiver-s3bucket-1c41a6lxgoksv", "integration_testing_c", s3
-        )
+        subject = StorageRepo.S3Repo("twilio-apps", "integration_testing_c", s3)
         subject.save_reminder(
             RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
         )
