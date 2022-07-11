@@ -1,4 +1,5 @@
 import json
+import os
 
 import Clock
 import RemindersDTO
@@ -10,10 +11,18 @@ import SendAdapter
 
 def lambda_handler(event, context):
     print(f"event: {event}")
+    bucket = os.environ["S3_BUCKET"]
+    print(f"bucket: {bucket}")
+    key_prefix = os.environ["S3_KEY_PREFIX"]
+    print(f"key_prefix: {key_prefix}")
 
+    config = RemindersDTO.RemindersConfig()
+    config.add_reminder(
+        "Take medicine",
+        ["09:00", "10:00"],
+    )
     clock = Clock.RealClock()
-    repo = StorageRepo.S3Repo("x", "ci_test")
-    repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
+    repo = StorageRepo.S3Repo(bucket, key_prefix)
     reminder_sender = ReminderSender.ReminderSender(config, clock, repo)
 
     subject = SendAdapter.SendAdapter(reminder_sender)
