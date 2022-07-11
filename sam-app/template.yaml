@@ -22,10 +22,14 @@ Conditions:
   CreateProdResources: !Equals
     - !Ref StackNamePrefix
     - prod
+  CreateTestResources: !Equals
+    - !Ref StackNamePrefix
+    - test
 
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Condition: CreateProdResources
     Properties:
       FunctionName: !Sub "Twilio-${StackNamePrefix}"
       CodeUri: hello_world/
@@ -40,11 +44,14 @@ Resources:
 
   SendRemindersTestFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Condition: CreateTestResources
     Properties:
       FunctionName: !Sub "twilio-send-reminders-${StackNamePrefix}"
       CodeUri: send_scheduled_reminders/
       Handler: app.lambda_handler
       Runtime: python3.7
+      Environment:
+        S3_BUCKET: !Ref S3Bucket
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -63,7 +70,6 @@ Resources:
 
   S3Bucket:
     Type: "AWS::S3::Bucket"
-    Condition: CreateProdResources
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
