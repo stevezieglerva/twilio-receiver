@@ -1,6 +1,6 @@
 #!/bin/bash
 source venv/bin/activate
-export PYTHONPATH=common_layer/python/domain:common_layer/python/infrastructure/system:common_layer/python/infrastructure/repository
+export PYTHONPATH=common_layer/python/domain:common_layer/python/infrastructure/system:common_layer/python/infrastructure/repository:send_scheduled_reminders/
 
 rm reports/*.*
 
