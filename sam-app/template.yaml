@@ -30,7 +30,21 @@ Resources:
       FunctionName: !Sub "Twilio-${StackNamePrefix}"
       CodeUri: hello_world/
       Handler: app.lambda_handler
-      Runtime: python3.10
+      Runtime: python3.7
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: post
+
+  SendRemindersTestFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: !Sub "twilio-send-reminders-${StackNamePrefix}"
+      CodeUri: send_scheduled_reminders/
+      Handler: app.lambda_handler
+      Runtime: python3.7
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -45,7 +59,7 @@ Resources:
       Description: Domain code for the app
       ContentUri: common_layer/
       CompatibleRuntimes:
-        - python3.10
+        - python3.7
 
   S3Bucket:
     Type: "AWS::S3::Bucket"
