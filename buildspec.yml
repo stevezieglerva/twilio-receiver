@@ -21,5 +21,5 @@ phases:
       - sam build
       - sam package --output-template-file packaged.yaml --s3-bucket $S3_ARTIFACTS
       - sam deploy --template-file packaged.yaml --stack-name twilio-receiver-test --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=test  --parameter-overrides StackNamePrefix=test
-      - sam deploy --template-file packaged.yaml --stack-name twilio-receiver-test --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
+      - sam deploy --template-file packaged.yaml --stack-name twilio-receiver-prod --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
       -  # sam deploy --template-file packaged.yaml --stack-name twilio-receiver --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
