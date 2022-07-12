@@ -4,6 +4,7 @@ import os
 python_path = os.environ.get("PYTHONPATH", "")
 print(f"python_path: {python_path}")
 
+from dataclasses import asdict
 
 from domain.RemindersDTO import *
 from domain.ReminderSender import *
@@ -30,4 +31,4 @@ def lambda_handler(event, context):
     subject = SendAdapter(reminder_sender)
     results = subject.send_reminders()
     print(f"reminders sent: {json.dumps(results, indent=3, default=str)}")
-    return results
+    return asdict(results)
