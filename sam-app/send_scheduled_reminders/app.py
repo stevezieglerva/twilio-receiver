@@ -4,11 +4,20 @@ import os
 python_path = os.environ.get("PYTHONPATH", "")
 print(f"python_path: {python_path}")
 
-print("first layer import")
-import domain.RemindersDTO
-import domain.ReminderSender
-import infrastructure.repository.StorageRepo
-import infrastructure.system.Clock
+
+from domain.RemindersDTO import *
+
+print("import 1")
+from domain.ReminderSender import *
+
+print("import 2")
+from infrastructure.repository.StorageRepo import *
+
+print("import 3")
+from infrastructure.system.Clock import *
+
+print("import 4")
+
 
 import SendAdapter
 
@@ -20,13 +29,13 @@ def lambda_handler(event, context):
     key_prefix = os.environ["S3_KEY_PREFIX"]
     print(f"key_prefix: {key_prefix}")
 
-    config = RemindersDTO.RemindersConfig()
+    config = RemindersConfig()
     config.add_reminder(
         "Take medicine",
         ["09:00", "10:00"],
     )
-    clock = Clock.RealClock()
-    repo = StorageRepo.S3Repo(bucket, key_prefix)
+    clock = RealClock()
+    repo = S3Repo(bucket, key_prefix)
     reminder_sender = ReminderSender.ReminderSender(config, clock, repo)
 
     subject = SendAdapter.SendAdapter(reminder_sender)
