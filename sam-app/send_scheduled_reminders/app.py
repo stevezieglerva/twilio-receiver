@@ -3,10 +3,10 @@ import os
 
 print(os.environ["PYTHONPATH"])
 
-import Clock
-import RemindersDTO
-import ReminderSender
-import StorageRepo
+import domain.RemindersDTO
+import domain.ReminderSender
+import infrastructure.repository.StorageRepo
+import infrastructure.system.Clock
 
 import SendAdapter
 
