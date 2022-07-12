@@ -18,9 +18,8 @@ class EndToEndTests(unittest.TestCase):
         s3 = S3()
 
         s3.delete_object(bucket, f"{key_prefix}/reminders.json")
-
         repo = S3Repo(bucket, key_prefix, s3)
-        repo.save_reminder(Reminder("Take medicine", ["00:00", "10:00"]))
+        repo.save_reminder(Reminder("Take medicine", ["00:00"]))
 
         # Act
         l = boto3.client("lambda")

@@ -35,7 +35,7 @@ class ReminderSender:
                     name=reminder.name,
                     times=reminder.times,
                     status=ReminderStatuses.ACTIVE,
-                    last_sent=self._clock.get_time(),
+                    last_sent=self._clock.get_time().isoformat(),
                     occurences=reminder.occurences + 1,
                 )
                 print(f"\tSending reminder for '{updated_reminder.name}'")

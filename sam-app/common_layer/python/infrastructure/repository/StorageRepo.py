@@ -11,7 +11,7 @@ from infrastructure.repository.S3 import *
 
 @dataclass(frozen=True)
 class RemindersDB:
-    db_last_update: datetime
+    db_last_update: str
     reminders: List[Reminder]
 
 
