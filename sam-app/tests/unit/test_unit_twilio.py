@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, Mock, PropertyMock, patch
 from infrastructure.notifications.Twilio import *
 
 
-class TWilioUnitTests(unittest.TestCase):
+class TwilioUnitTests(unittest.TestCase):
     def test_should_send_text(self):
         # Arrange
         subject = FakeTwilio("abc", "123")
@@ -18,7 +18,7 @@ class TWilioUnitTests(unittest.TestCase):
         print(f"test results: {results}")
 
         # Assert
-        self.assertEqual(results, "")
+        self.assertTrue(results.date != "")
 
 
 if __name__ == "__main__":

@@ -1,11 +1,12 @@
 from abc import ABC, abstractclassmethod
 from dataclasses import asdict, dataclass
+from datetime import datetime
 from typing import List
 
 
 @dataclass(frozen=True)
-class Text:
-    phone_numbers: List[str]
+class SMSText:
+    phone_numbers: str
     text: str
     date: str
 
@@ -26,7 +27,7 @@ class FakeTwilio(IProcessingTexts):
         self._twilio_auth_token = twilio_auth_token
 
     def send_text(self, phone_number: str, text: str) -> str:
-        return ""
+        return SMSText(phone_number, text, datetime.now().isoformat())
 
     def receive_text(self, raw_webhook_body: str) -> str:
         return ""
