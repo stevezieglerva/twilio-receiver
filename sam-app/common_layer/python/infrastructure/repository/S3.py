@@ -1,4 +1,5 @@
 import json
+import os
 from abc import ABC, abstractmethod
 from collections import namedtuple
 from datetime import datetime
@@ -21,6 +22,10 @@ class S3Base(ABC):
 
     @abstractmethod
     def get_object(self, bucket, key):
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_object(self, bucket, key):
         raise NotImplementedError
 
 
@@ -82,6 +87,11 @@ class S3(S3Base):
         response = s3.get_object(Bucket=bucket, Key=key)
         return response["Body"].read()
 
+    def delete_object(self, bucket, key):
+        s3 = boto3.client("s3")
+        response = s3.delete_object(Bucket=bucket, Key=key)
+        return response
+
 
 class S3FakeLocal(S3Base):
     def put_object(self, bucket, key, data):
@@ -101,3 +111,8 @@ class S3FakeLocal(S3Base):
         print(f"Reading: {filename}")
         with open(filename, "r") as file:
             return file.read()
+
+    def delete_object(self, bucket, key):
+        filename = f"test_fakes3_integration_{bucket}__{key.replace('/', '__')}"
+        print(f"Deleting: {filename}")
+        os.remove(filename)

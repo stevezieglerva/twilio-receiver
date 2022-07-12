@@ -8,7 +8,7 @@ import S3
 import StorageRepo
 
 
-class S3RepoUnitTests(unittest.TestCase):
+class S3RepoIntegrationTests(unittest.TestCase):
     def test_should_get_all_data(self):
         # Arrange
         s3 = S3.S3()

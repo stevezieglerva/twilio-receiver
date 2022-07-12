@@ -22,10 +22,6 @@ def lambda_handler(event, context):
     print(f"key_prefix: {key_prefix}")
 
     config = RemindersConfig()
-    config.add_reminder(
-        "Take medicine",
-        ["09:00", "10:00"],
-    )
     clock = RealClock()
     s3 = S3()
     repo = S3Repo(bucket, key_prefix, s3)
