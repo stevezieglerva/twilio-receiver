@@ -11,7 +11,6 @@ from infrastructure.notifications.TwilioClient import *
 
 
 def get_secret():
-
     secret_name = "twilio"
     region_name = "us-east-1"
 

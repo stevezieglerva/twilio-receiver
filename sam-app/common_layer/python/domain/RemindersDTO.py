@@ -24,19 +24,3 @@ class Reminder:
 
 class DuplicateReminderNameException(ValueError):
     pass
-
-
-class RemindersConfig:
-    def __init__(self):
-        self._reminders = []
-
-    def add_reminder(self, name: str, times: List[str]) -> None:
-        existing_names = [r.name for r in self._reminders]
-        if name in existing_names:
-            raise DuplicateReminderNameException(
-                f"Reminder with name '{name}' already exists"
-            )
-        self._reminders.append(Reminder(name=name, times=times))
-
-    def get_reminders(self) -> List[Reminder]:
-        return self._reminders
