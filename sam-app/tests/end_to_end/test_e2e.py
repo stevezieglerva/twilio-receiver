@@ -25,10 +25,12 @@ class EndToEndTests(unittest.TestCase):
         # Act
         l = boto3.client("lambda")
         results = l.invoke(FunctionName="twilio-send-reminders-test", Payload=b"{}")
-        print(f"test results: {json.dumps(results, indent=3, default=str)}")
+        payload = results["Payload"].read()
+        payload_json = json.loads(payload)
+        print(f"test results: {json.dumps(payload_json, indent=3, default=str)}")
 
         # Assert
-        self.assertEqual(results, "")
+        self.assertEqual(payload_json, "")
 
 
 if __name__ == "__main__":

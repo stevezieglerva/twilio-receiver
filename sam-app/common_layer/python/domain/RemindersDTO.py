@@ -18,7 +18,7 @@ class Reminder:
     name: str
     times: List[str]
     status: str = ReminderStatuses.INACTIVE
-    last_sent: datetime = ""
+    last_sent: str = ""
     occurences: int = 0
 
 

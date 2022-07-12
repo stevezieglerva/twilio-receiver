@@ -73,10 +73,10 @@ class S3Repo(IStoringReminders):
         new_db = RemindersDB(
             db_last_update=datetime.now().isoformat(), reminders=new_reminders
         )
-        print(f"Update to save: {new_db}")
+        print(f"\nUpdate to save: {new_db}")
         data_json = json.dumps(asdict(new_db))
         self._s3.put_object(self._bucket_name, self._db_key, data_json)
-        print(f"Update DB at self.db_key: {self._db_key}")
+        print(f"\nUpdate DB at self.db_key: {self._db_key}")
 
     def get_reminders(self) -> list:
         reminder_db = self.get_all_data()
