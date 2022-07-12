@@ -11,7 +11,7 @@ from infrastructure.repository.S3 import *
 from infrastructure.repository.StorageRepo import *
 from infrastructure.system.Clock import *
 
-import SendAdapter
+from SendAdapter import *
 
 
 def lambda_handler(event, context):
@@ -29,9 +29,9 @@ def lambda_handler(event, context):
     clock = RealClock()
     s3 = S3()
     repo = S3Repo(bucket, key_prefix, s3)
-    reminder_sender = ReminderSender.ReminderSender(config, clock, repo)
+    reminder_sender = ReminderSender(config, clock, repo)
 
-    subject = SendAdapter.SendAdapter(reminder_sender)
+    subject = SendAdapter(reminder_sender)
     results = subject.send_reminders()
     print(f"reminders sent: {json.dumps(results, indent=3, default=str)}")
     return results
