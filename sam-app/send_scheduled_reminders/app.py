@@ -31,4 +31,4 @@ def lambda_handler(event, context):
     subject = SendAdapter(reminder_sender)
     results = subject.send_reminders()
     print(f"reminders sent: {json.dumps(results, indent=3, default=str)}")
-    return asdict(results)
+    return [asdict(r) for r in results]
