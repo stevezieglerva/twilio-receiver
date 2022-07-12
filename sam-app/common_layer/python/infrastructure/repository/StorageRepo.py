@@ -4,21 +4,20 @@ from dataclasses import asdict, dataclass
 from datetime import date, datetime
 from typing import List
 
-import RemindersDTO
 from dateutil.parser import *
-
-import S3
+from domain.RemindersDTO import *
+from infrastructure.repository.S3 import *
 
 
 @dataclass(frozen=True)
 class RemindersDB:
     db_last_update: datetime
-    reminders: List[RemindersDTO.Reminder]
+    reminders: List[Reminder]
 
 
 class IStoringReminders(ABC):
     @abstractclassmethod
-    def save_reminder(self, reminder: RemindersDTO.Reminder) -> None:
+    def save_reminder(self, reminder: Reminder) -> None:
         raise NotImplementedError()
 
     @abstractclassmethod
@@ -26,7 +25,7 @@ class IStoringReminders(ABC):
         raise NotImplementedError()
 
     @abstractclassmethod
-    def get_reminder(self, name: str) -> RemindersDTO.Reminder:
+    def get_reminder(self, name: str) -> Reminder:
         raise NotImplementedError()
 
     @abstractclassmethod
@@ -45,7 +44,7 @@ class FakeRepo(IStoringReminders):
     def get_reminders(self) -> list:
         return self._reminders
 
-    def get_reminder(self, name: str) -> RemindersDTO.Reminder:
+    def get_reminder(self, name: str) -> Reminder:
         for reminder in self._reminders:
             if reminder.name == name:
                 return reminder
@@ -66,7 +65,7 @@ class S3Repo(IStoringReminders):
         self._s3 = s3
         self._db_key = f"{self._key_prefix}/reminders_db.json"
 
-    def save_reminder(self, reminder: RemindersDTO.Reminder) -> None:
+    def save_reminder(self, reminder: Reminder) -> None:
         reminders_db = self.get_all_data()
         current_reminders = reminders_db.reminders
         other_reminders = [r for r in current_reminders if r.name != reminder.name]
@@ -82,7 +81,7 @@ class S3Repo(IStoringReminders):
         reminder_db = self.get_all_data()
         return reminder_db.reminders
 
-    def get_reminder(self, name: str) -> RemindersDTO.Reminder:
+    def get_reminder(self, name: str) -> Reminder:
         reminders = self.get_reminders()
         for reminder in reminders:
             if reminder.name == name:
@@ -98,7 +97,7 @@ class S3Repo(IStoringReminders):
             return RemindersDB(db_last_update=None, reminders=[])
 
         data_json = json.loads(data)
-        reminders_list = [RemindersDTO.Reminder(**r) for r in data_json["reminders"]]
+        reminders_list = [Reminder(**r) for r in data_json["reminders"]]
         return RemindersDB(
             db_last_update=parse(data_json["db_last_update"]), reminders=reminders_list
         )
