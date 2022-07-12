@@ -10,18 +10,15 @@ from domain.RemindersDTO import *
 
 
 class ReminderSender:
-    _config: RemindersConfig
     _clock: ITellingTime
     _repo: IStoringReminders
 
     def __init__(
         self,
-        config: RemindersConfig,
         clock: ITellingTime,
         repo: IStoringReminders,
     ):
 
-        self._config = config
         self._clock = clock
         self._repo = repo
 

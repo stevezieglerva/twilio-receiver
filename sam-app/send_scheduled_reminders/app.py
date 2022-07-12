@@ -22,11 +22,10 @@ def lambda_handler(event, context):
     key_prefix = os.environ["S3_KEY_PREFIX"]
     print(f"key_prefix: {key_prefix}")
 
-    config = RemindersConfig()
     clock = RealClock()
     s3 = S3()
     repo = S3Repo(bucket, key_prefix, s3)
-    reminder_sender = ReminderSender(config, clock, repo)
+    reminder_sender = ReminderSender(clock, repo)
 
     subject = SendAdapter(reminder_sender)
     results = subject.send_reminders()

@@ -10,16 +10,11 @@ import StorageRepo
 class RemindersUnitTests(unittest.TestCase):
     def test_should_send_text_if_time_right(self):
         # Arrange
-        config = RemindersDTO.RemindersConfig()
-        config.add_reminder(
-            "Take medicine",
-            ["09:00", "10:00"],
-        )
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(config, clock, repo)
+        subject = ReminderSender.ReminderSender(clock, repo)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -30,16 +25,11 @@ class RemindersUnitTests(unittest.TestCase):
 
     def test_should_send_not_text_if_time_wrong(self):
         # Arrange
-        config = RemindersDTO.RemindersConfig()
-        config.add_reminder(
-            "Take medicine",
-            ["09:00", "10:00"],
-        )
 
         clock = Clock.FakeClock("2020-01-01 08:59:59")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(config, clock, repo)
+        subject = ReminderSender.ReminderSender(clock, repo)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -50,16 +40,11 @@ class RemindersUnitTests(unittest.TestCase):
 
     def test_should_activate_reminder_when_texted(self):
         # Arrange
-        config = RemindersDTO.RemindersConfig()
-        config.add_reminder(
-            "Take medicine",
-            ["09:00", "10:00"],
-        )
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(config, clock, repo)
+        subject = ReminderSender.ReminderSender(clock, repo)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -72,16 +57,11 @@ class RemindersUnitTests(unittest.TestCase):
 
     def test_should_save_activated_reminder_in_repo(self):
         # Arrange
-        config = RemindersDTO.RemindersConfig()
-        config.add_reminder(
-            "Take medicine",
-            ["09:00", "10:00"],
-        )
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(config, clock, repo)
+        subject = ReminderSender.ReminderSender(clock, repo)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -93,11 +73,6 @@ class RemindersUnitTests(unittest.TestCase):
 
     def test_should_not_send_if_reminder_is_done(self):
         # Arrange
-        config = RemindersDTO.RemindersConfig()
-        config.add_reminder(
-            "Take medicine",
-            ["09:00", "10:00"],
-        )
 
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
@@ -108,7 +83,7 @@ class RemindersUnitTests(unittest.TestCase):
                 status=RemindersDTO.ReminderStatuses.DONE,
             )
         )
-        subject = ReminderSender.ReminderSender(config, clock, repo)
+        subject = ReminderSender.ReminderSender(clock, repo)
 
         # Act
         results = subject.send_needed_reminder_texts()
