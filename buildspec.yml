@@ -11,7 +11,8 @@ phases:
   build:
     commands:
       - export S3_ARTIFACTS=$(aws cloudformation describe-stacks --stack-name twilio-receiver-pipeline --query "Stacks[0].Outputs[?OutputKey == 'S3Artifacts'].OutputValue" --output text)
-      - printenv | grep -e "S3_ARTIFACTS|PYTHONPATH"
+      - printenv | grep "S3_ARTIFACTS"
+      - printenv | grep "PYTHONPATH"
       - cd sam-app
       - pwd
       - ls
