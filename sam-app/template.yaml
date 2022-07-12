@@ -45,12 +45,12 @@ Resources:
           S3_BUCKET: "twilio-apps"
           KEY_PREFIX: !Ref StackNamePrefix
       Layers:
-        - !Ref LayerCommon
+        - !Ref TwilioLayer
       Policies:
         - S3CrudPolicy:
             BucketName: "twilio-apps"
 
-  LayerCommon:
+  TwilioLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
       Description: Domain code for the app
