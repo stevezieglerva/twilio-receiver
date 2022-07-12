@@ -53,7 +53,6 @@ Resources:
   LayerCommon:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: !Sub "twilio-common-${StackNamePrefix}"
       Description: Domain code for the app
       ContentUri: common_layer/
       CompatibleRuntimes:
