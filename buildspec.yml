@@ -16,7 +16,8 @@ phases:
       - pwd
       - ls
       - pip install -r requirements.txt
-      - . ./run_tests.sh fail
+      - . ./run_tests.sh fail "*unit*.*"
+      - . ./run_tests.sh fail "*int*.*"
       - sam validate -t template.yaml
       - sam build
       - sam package --output-template-file packaged-test.yaml --s3-bucket $S3_ARTIFACTS
