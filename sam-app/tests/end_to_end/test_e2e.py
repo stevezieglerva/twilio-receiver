@@ -29,7 +29,7 @@ class EndToEndTests(unittest.TestCase):
         print(f"test results: {json.dumps(payload_json, indent=3, default=str)}")
 
         # Assert
-        self.assertEqual(payload_json, "")
+        self.assertEqual(payload_json[0]["name"], "Take medicine")
 
 
 if __name__ == "__main__":
