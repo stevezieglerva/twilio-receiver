@@ -3,24 +3,32 @@ from datetime import datetime
 from typing import List
 
 from dateutil.parser import *
+from infrastructure.notifications.TwilioClient import *
 from infrastructure.repository.StorageRepo import *
 from infrastructure.system.Clock import *
 
 from domain.RemindersDTO import *
 
 
+class TwilioTextFailed(Exception):
+    pass
+
+
 class ReminderSender:
     _clock: ITellingTime
     _repo: IStoringReminders
+    _twilio: IProcessingTexts
 
     def __init__(
         self,
         clock: ITellingTime,
         repo: IStoringReminders,
+        twilio: IProcessingTexts,
     ):
 
         self._clock = clock
         self._repo = repo
+        self._twilio = twilio
 
     def send_needed_reminder_texts(self) -> List[Reminder]:
         sent_reminders = []
@@ -28,6 +36,13 @@ class ReminderSender:
         for reminder in reminders:
             print(f"Checking '{reminder.name}'")
             if self._should_send_text(reminder):
+                print("Attempting to send text.")
+                twilio_response = self._twilio.send_text("1234567", reminder.name)
+                print("Text sent.")
+                if twilio_response.confirmation == "":
+                    raise TwilioTextFailed(
+                        f"Couldn't send text to {twilio_response.phone_number} for the reminder '{reminder.name}'"
+                    )
                 updated_reminder = Reminder(
                     name=reminder.name,
                     times=reminder.times,
