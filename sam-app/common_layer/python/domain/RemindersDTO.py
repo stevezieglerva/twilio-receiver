@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
-from common_layer.python.infrastructure.system.Clock import ITellingTime
+from Clock import ITellingTime
 from dateutil.parser import *
 
 
