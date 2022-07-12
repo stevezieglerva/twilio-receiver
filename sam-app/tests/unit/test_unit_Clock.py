@@ -3,7 +3,7 @@ import unittest
 from datetime import datetime
 from unittest.mock import MagicMock, Mock, PropertyMock, patch
 
-from common_layer.python.infrastructure.system.Clock import FakeClock, RealClock
+from Clock import FakeClock, RealClock
 
 
 class FakeClockUnitTests(unittest.TestCase):
