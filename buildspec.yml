@@ -11,7 +11,7 @@ phases:
   build:
     commands:
       - export S3_ARTIFACTS=$(aws cloudformation describe-stacks --stack-name twilio-receiver-pipeline --query "Stacks[0].Outputs[?OutputKey == 'S3Artifacts'].OutputValue" --output text)
-      - printenv | grep S3_ARTIFACTS
+      - printenv | grep -e "S3_ARTIFACTS|PYTHONPATH"
       - cd sam-app
       - pwd
       - ls
@@ -19,7 +19,8 @@ phases:
       - . ./run_tests.sh
       - sam validate -t template.yaml
       - sam build
-      - sam package --output-template-file packaged.yaml --s3-bucket $S3_ARTIFACTS
-      - sam deploy --template-file packaged.yaml --stack-name twilio-receiver-test --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=test  --parameter-overrides StackNamePrefix=test
-      - sam deploy --template-file packaged.yaml --stack-name twilio-receiver-prod --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
+      - sam package --output-template-file packaged-test.yaml --s3-bucket $S3_ARTIFACTS
+      - sam package --output-template-file packaged-prod.yaml --s3-bucket $S3_ARTIFACTS
+      - sam deploy --template-file packaged-test.yaml --stack-name twilio-receiver-test --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=test  --parameter-overrides StackNamePrefix=test
+      - sam deploy --template-file packaged-prod.yaml --stack-name twilio-receiver-prod --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
       -  # sam deploy --template-file packaged.yaml --stack-name twilio-receiver --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
