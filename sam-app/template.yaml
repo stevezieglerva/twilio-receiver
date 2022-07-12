@@ -43,7 +43,7 @@ Resources:
       Environment:
         Variables:
           S3_BUCKET: "twilio-apps"
-          KEY_PREFIX: !Ref StackNamePrefix
+          S3_KEY_PREFIX: !Ref StackNamePrefix
       Layers:
         - !Ref TwilioLayer
       Policies:
