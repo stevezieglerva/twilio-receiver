@@ -1,7 +1,8 @@
 import json
 import os
 
-print(os.environ["PYTHONPATH"])
+python_path = os.environ.get("PYTHONPATH", "")
+print(f"python_path: {python_path}")
 
 import domain.RemindersDTO
 import domain.ReminderSender
