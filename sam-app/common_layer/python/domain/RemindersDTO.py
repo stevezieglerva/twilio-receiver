@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
-from Clock import ITellingTime
 from dateutil.parser import *
+from infrastructure.system import *
 
 
 @dataclass(frozen=True)

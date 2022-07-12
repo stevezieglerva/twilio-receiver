@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import MagicMock, Mock, PropertyMock, patch
 
-import RemindersDTO
+from domain.RemindersDTO import *
 
 
 class ReminderConfigUnitTests(unittest.TestCase):
     def test_should_add_reminder(self):
         # Arrange
-        subject = RemindersDTO.RemindersConfig()
+        subject = RemindersConfig()
 
         # Act
         results = subject.add_reminder("Take medicine", ["09:00", "10:00"])
@@ -19,7 +19,7 @@ class ReminderConfigUnitTests(unittest.TestCase):
 
     def test_should_fail_if_duplicate_name(self):
         # Arrange
-        subject = RemindersDTO.RemindersConfig()
+        subject = RemindersConfig()
         results = subject.add_reminder("Take medicine", ["09:00", "10:00"])
 
         # Act

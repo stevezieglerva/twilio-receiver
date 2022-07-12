@@ -1,10 +1,10 @@
 from argparse import RawDescriptionHelpFormatter
 
-import ReminderSender
+from domain.ReminderSender import *
 
 
 class SendAdapter:
-    def __init__(self, reminder_sender: ReminderSender.ReminderSender) -> None:
+    def __init__(self, reminder_sender: ReminderSender) -> None:
         self._reminder_sender = reminder_sender
 
     def send_reminders(self) -> None:
