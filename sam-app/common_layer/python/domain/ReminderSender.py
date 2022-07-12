@@ -2,39 +2,40 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
-import infrastructure.system.Clock
 import StorageRepo
 from dateutil.parser import *
+from infrastructure.repository.StorageRepo import *
+from infrastructure.system.Clock import *
 
-import RemindersDTO
+from domain.RemindersDTO import *
 
 
 class ReminderSender:
-    _config: RemindersDTO.RemindersConfig
-    _clock: Clock.ITellingTime
-    _repo: StorageRepo.IStoringReminders
+    _config: RemindersConfig
+    _clock: ITellingTime
+    _repo: IStoringReminders
 
     def __init__(
         self,
-        config: RemindersDTO.RemindersConfig,
-        clock: Clock.ITellingTime,
-        repo: StorageRepo.IStoringReminders,
+        config: RemindersConfig,
+        clock: ITellingTime,
+        repo: IStoringReminders,
     ):
 
         self._config = config
         self._clock = clock
         self._repo = repo
 
-    def send_needed_reminder_texts(self) -> List[RemindersDTO.Reminder]:
+    def send_needed_reminder_texts(self) -> List[Reminder]:
         sent_reminders = []
         reminders = self._repo.get_reminders()
         for reminder in reminders:
             print(f"Checking '{reminder.name}'")
             if self._should_send_text(reminder):
-                updated_reminder = RemindersDTO.Reminder(
+                updated_reminder = Reminder(
                     name=reminder.name,
                     times=reminder.times,
-                    status=RemindersDTO.ReminderStatuses.ACTIVE,
+                    status=ReminderStatuses.ACTIVE,
                     last_sent=self._clock.get_time(),
                     occurences=reminder.occurences + 1,
                 )
@@ -52,7 +53,7 @@ class ReminderSender:
             print(
                 f"\tAt {self._clock.get_time()}, reminder is {reminder.status} for {reminder_time_for_today}"
             )
-            if reminder.status == RemindersDTO.ReminderStatuses.DONE:
+            if reminder.status == ReminderStatuses.DONE:
                 print(f"\tReminder is done. Skipping")
                 return False
             if now >= reminder_time_for_today:
