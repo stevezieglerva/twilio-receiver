@@ -5,6 +5,8 @@ python_path = os.environ.get("PYTHONPATH", "")
 print(f"python_path: {python_path}")
 
 import domain.RemindersDTO
+
+print("first layer import")
 import domain.ReminderSender
 import infrastructure.repository.StorageRepo
 import infrastructure.system.Clock
