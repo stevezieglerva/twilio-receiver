@@ -16,11 +16,16 @@ class EndToEndTests(unittest.TestCase):
         key_prefix = "test"
         os.environ["S3_KEY_PREFIX"] = key_prefix
         s3 = S3()
+
+        s3.delete_object(bucket, f"{key_prefix}/reminders.json")
+
         repo = S3Repo(bucket, key_prefix, s3)
+        repo.save_reminder(Reminder("Take medicine", ["00:00", "10:00"]))
 
         # Act
-        results = subject.method()
-        print(f"test results: {results}")
+        l = boto3.client("lambda")
+        results = l.invoke(FunctionName="twilio-send-reminders-test", Payload=b"{}")
+        print(f"test results: {json.dumps(results, indent=3, default=str)}")
 
         # Assert
         self.assertEqual(results, "")
