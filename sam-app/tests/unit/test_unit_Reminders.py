@@ -23,7 +23,8 @@ class RemindersUnitTests(unittest.TestCase):
         print(f"test results: {results}")
 
         # Assert
-        self.assertEqual(results[0].name, "Take medicine")
+        self.assertEqual(results[0].reminder.name, "Take medicine")
+        self.assertEqual(results[0].sms_text.phone_number, "+11111111111")
 
     def test_should_send_not_text_if_time_wrong(self):
         # Arrange

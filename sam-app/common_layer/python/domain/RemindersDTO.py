@@ -17,6 +17,7 @@ class ReminderStatuses:
 class Reminder:
     name: str
     times: List[str]
+    phone_numbers: List[str]
     status: str = ReminderStatuses.INACTIVE
     last_sent: str = ""
     occurences: int = 0

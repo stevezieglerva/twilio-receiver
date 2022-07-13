@@ -28,7 +28,9 @@ class S3RepoUnitTests(unittest.TestCase):
 
         # Act
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
+            RemindersDTO.Reminder(
+                "Take medicine", ["09:00", "10:00"], ["+1111111111", "+12222222222"]
+            )
         )
 
         # Assert
@@ -41,13 +43,19 @@ class S3RepoUnitTests(unittest.TestCase):
         subject = StorageRepo.S3Repo("fake--bucket", "unit_testing_c", s3)
 
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
+            RemindersDTO.Reminder(
+                "Take medicine", ["09:00", "10:00"], ["+1111111111", "+12222222222"]
+            )
         )
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine 2", ["12:00", "13:00"])
+            RemindersDTO.Reminder(
+                "Take medicine 2", ["12:00", "13:00"], ["+1111111111", "+12222222222"]
+            )
         )
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine 3", ["15:00", "16:00"])
+            RemindersDTO.Reminder(
+                "Take medicine 3", ["15:00", "16:00"], ["+1111111111", "+12222222222"]
+            )
         )
 
         # Act
@@ -55,6 +63,7 @@ class S3RepoUnitTests(unittest.TestCase):
             RemindersDTO.Reminder(
                 name="Take medicine 2",
                 times=["12:00", "13:00"],
+                phone_numbers=["+1111111111", "+12222222222"],
                 status=RemindersDTO.ReminderStatuses.ACTIVE,
             )
         )

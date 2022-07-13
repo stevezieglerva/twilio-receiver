@@ -10,6 +10,12 @@ from infrastructure.system.Clock import *
 from domain.RemindersDTO import *
 
 
+@dataclass(frozen=True)
+class SentReminderText:
+    reminder: Reminder
+    sms_text: SMSText
+
+
 class TwilioTextFailed(Exception):
     pass
 
@@ -30,7 +36,7 @@ class ReminderSender:
         self._repo = repo
         self._twilio = twilio
 
-    def send_needed_reminder_texts(self) -> List[Reminder]:
+    def send_needed_reminder_texts(self) -> List[SentReminderText]:
         sent_reminders = []
         reminders = self._repo.get_reminders()
         for reminder in reminders:
