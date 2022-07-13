@@ -19,7 +19,7 @@ class EndToEndTests(unittest.TestCase):
 
         s3.delete_object(bucket, f"{key_prefix}/reminders.json")
         repo = S3Repo(bucket, key_prefix, s3)
-        repo.save_reminder(Reminder("Take medicine", ["00:00"]))
+        repo.save_reminder(Reminder("e2e test - Take medicine", ["00:00"]))
 
         # Act
         l = boto3.client("lambda")
@@ -29,7 +29,7 @@ class EndToEndTests(unittest.TestCase):
         print(f"test results: {json.dumps(payload_json, indent=3, default=str)}")
 
         # Assert
-        self.assertEqual(payload_json[0]["name"], "Take medicine")
+        self.assertEqual(payload_json[0]["name"], "e2e test - Take medicine")
 
 
 if __name__ == "__main__":
