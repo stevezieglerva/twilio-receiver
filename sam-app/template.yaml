@@ -49,12 +49,14 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: "twilio-apps"
-        - Action:
-            - secretsmanager:DescribeSecret
-            - secretsmanager:GetSecretValue
-          Effect: Allow
-          Resource:
-            - "arn:aws:secretsmanager:us-east-1:112280397275:secret:twilio"
+        - Statement:
+            - Sid: Secrets
+              Action:
+                - secretsmanager:DescribeSecret
+                - secretsmanager:GetSecretValue
+              Effect: Allow
+              Resource:
+                - "arn:aws:secretsmanager:us-east-1:112280397275:secret:twilio"
 
   TwilioLayer:
     Type: AWS::Serverless::LayerVersion
