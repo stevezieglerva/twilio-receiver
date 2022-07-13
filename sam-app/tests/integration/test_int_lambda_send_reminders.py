@@ -1,5 +1,6 @@
 import os
 import unittest
+from time import sleep
 from unittest.mock import MagicMock, Mock, PropertyMock, patch
 
 import boto3
@@ -25,6 +26,13 @@ class SendRemindersIntegrationTests(unittest.TestCase):
         )
 
         # Act
+        # send several reminders to show the occurrences increase
+        results = lambda_handler({}, "")
+        sleep(5)
+        results = lambda_handler({}, "")
+        sleep(5)
+        results = lambda_handler({}, "")
+        sleep(5)
         results = lambda_handler({}, "")
         print(f"test results: {json.dumps(results, indent=3, default=str)}")
 

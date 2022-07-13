@@ -34,15 +34,22 @@ class ReminderSender:
         sent_reminders = []
         reminders = self._repo.get_reminders()
         for reminder in reminders:
-            print(f"Checking '{reminder.name}'")
+            print(f"\nChecking '{reminder}'")
             if self._should_send_text(reminder):
                 print("Attempting to send text.")
-                text_message = f"""⏰ Reminder
+                reminder_occurrence = ""
+                if reminder.occurences > 1:
+                    reminder_occurrence = f"#{reminder.occurences + 1}"
+                text_message = f"""
+⏰ Reminder {reminder_occurrence}
 {reminder.name}
+
+Sent: {datetime.now().isoformat()}
 Text 'done' to mark as done.
 """
                 twilio_response = self._twilio.send_text("+19193229617", text_message)
-                print("Text sent.")
+                print("Text sent:")
+                print(f"{text_message}")
                 if twilio_response.confirmation == "":
                     raise TwilioTextFailed(
                         f"Couldn't send text to {twilio_response.phone_number} for the reminder '{reminder.name}'"
