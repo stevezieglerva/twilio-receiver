@@ -31,7 +31,8 @@ class RemindersUnitTests(unittest.TestCase):
         clock = Clock.FakeClock("2020-01-01 08:59:59")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(clock, repo)
+        twilio = FakeTwilio("abc", "123")
+        subject = ReminderSender.ReminderSender(clock, repo, twilio)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -46,7 +47,8 @@ class RemindersUnitTests(unittest.TestCase):
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(clock, repo)
+        twilio = FakeTwilio("abc", "123")
+        subject = ReminderSender.ReminderSender(clock, repo, twilio)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -63,7 +65,8 @@ class RemindersUnitTests(unittest.TestCase):
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        subject = ReminderSender.ReminderSender(clock, repo)
+        twilio = FakeTwilio("abc", "123")
+        subject = ReminderSender.ReminderSender(clock, repo, twilio)
 
         # Act
         results = subject.send_needed_reminder_texts()
@@ -85,7 +88,8 @@ class RemindersUnitTests(unittest.TestCase):
                 status=RemindersDTO.ReminderStatuses.DONE,
             )
         )
-        subject = ReminderSender.ReminderSender(clock, repo)
+        twilio = FakeTwilio("abc", "123")
+        subject = ReminderSender.ReminderSender(clock, repo, twilio)
 
         # Act
         results = subject.send_needed_reminder_texts()
