@@ -17,6 +17,10 @@ Parameters:
       - test
       - prod
     Description: Environment prefix for stack resources
+  SenderCronSchedule:
+    Type: String
+    Default: "0 0 5 31 2 ?" # fake scheudle will never happen
+    Description: Cron schedule for the lambda
 
 Resources:
   TwilioWebHookFunction:
@@ -57,6 +61,11 @@ Resources:
               Effect: Allow
               Resource:
                 - "*"
+      Events:
+        CronEvent:
+          Properties:
+            Schedule: !Ref SenderCronSchedule
+          Type: Schedule
 
   TwilioLayer:
     Type: AWS::Serverless::LayerVersion
