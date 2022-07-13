@@ -6,6 +6,7 @@ import RemindersDTO
 import ReminderSender
 import SendAdapter
 import StorageRepo
+from infrastructure.notifications.TwilioClient import FakeTwilio
 
 
 class SendAdapterUnitTests(unittest.TestCase):
@@ -14,7 +15,8 @@ class SendAdapterUnitTests(unittest.TestCase):
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
         repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
-        reminder_sender = ReminderSender.ReminderSender(clock, repo)
+        twilio = FakeTwilio("abc", "123")
+        reminder_sender = ReminderSender.ReminderSender(clock, repo, twilio)
 
         subject = SendAdapter.SendAdapter(reminder_sender)
 
