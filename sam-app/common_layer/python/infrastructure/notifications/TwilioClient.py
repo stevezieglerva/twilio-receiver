@@ -46,7 +46,7 @@ class Twilio(IProcessingTexts):
 
     def send_text(self, phone_number: str, text: str) -> SMSText:
         message = self._client.messages.create(
-            body="This is the ship that made the Kessel Run in fourteen parsecs?",
+            body=text,
             from_="+19894655460",
             to=phone_number,
         )

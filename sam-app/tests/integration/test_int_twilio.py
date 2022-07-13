@@ -10,15 +10,13 @@ from botocore.exceptions import ClientError
 from infrastructure.notifications.TwilioClient import *
 
 
-def get_secret():
-    secret_name = "twilio"
+def get_secret(secret_name: str):
+    secret_name = secret_name
     region_name = "us-east-1"
-
     session = boto3.session.Session()
     client = session.client(service_name="secretsmanager", region_name=region_name)
 
     get_secret_value_response = client.get_secret_value(SecretId=secret_name)
-
     if "SecretString" in get_secret_value_response:
         secret = get_secret_value_response["SecretString"]
         return secret
@@ -32,7 +30,7 @@ def get_secret():
 class TwilioUnitTests(unittest.TestCase):
     def test_should_send_text(self):
         # Arrange
-        keys = json.loads(get_secret())
+        keys = json.loads(get_secret("twilio"))
         print(keys)
         print(type(keys))
         account_sid = keys["TWILIO_ACCOUNT_SID"]
