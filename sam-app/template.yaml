@@ -17,9 +17,10 @@ Parameters:
       - test
       - prod
     Description: Environment prefix for stack resources
+
   SenderCronSchedule:
     Type: String
-    Default: "0 0 5 31 2 ?" # fake scheudle will never happen
+    Default: "cron(0,10,20,30,40,50 * ? * * *)" # "0 0 5 31 2 ?"  fake scheudle will never happen
     Description: Cron schedule for the lambda
 
 Resources:
