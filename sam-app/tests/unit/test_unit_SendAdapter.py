@@ -14,7 +14,9 @@ class SendAdapterUnitTests(unittest.TestCase):
         # Arrange
         clock = Clock.FakeClock("2020-01-01 09:00:01")
         repo = StorageRepo.FakeRepo()
-        repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"]))
+        repo.save_reminder(
+            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"], ["333"])
+        )
         twilio = FakeTwilio("abc", "123")
         reminder_sender = ReminderSender.ReminderSender(clock, repo, twilio)
 
@@ -25,7 +27,7 @@ class SendAdapterUnitTests(unittest.TestCase):
         print(f"test results: {results}")
 
         # Assert
-        self.assertEqual(results[0].name, "Take medicine")
+        self.assertEqual(results[0].reminder.name, "Take medicine")
 
 
 if __name__ == "__main__":
