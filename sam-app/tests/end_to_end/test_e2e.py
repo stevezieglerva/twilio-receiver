@@ -29,7 +29,8 @@ class EndToEndTests(unittest.TestCase):
         print(f"test results: {json.dumps(payload_json, indent=3, default=str)}")
 
         # Assert
-        self.assertEqual(payload_json[0]["name"], "e2e test - Take medicine")
+        reminders_sent = [r["name"] for r in payload_json]
+        self.assertTrue("e2e test - Take medicine" in reminders_sent)
 
 
 if __name__ == "__main__":
