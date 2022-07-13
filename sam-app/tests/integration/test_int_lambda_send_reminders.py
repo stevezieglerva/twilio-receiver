@@ -15,7 +15,7 @@ class SendRemindersIntegrationTests(unittest.TestCase):
         # Arrange
         bucket = "twilio-apps"
         os.environ["S3_BUCKET"] = bucket
-        key_prefix = "test/integration/"
+        key_prefix = "test/integration"
         os.environ["S3_KEY_PREFIX"] = key_prefix
         s3 = S3()
 

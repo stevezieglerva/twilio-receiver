@@ -13,7 +13,7 @@ class EndToEndTests(unittest.TestCase):
         # Arrange
         bucket = "twilio-apps"
         os.environ["S3_BUCKET"] = bucket
-        key_prefix = "test/end_to_end/"
+        key_prefix = "test/end_to_end"
         os.environ["S3_KEY_PREFIX"] = key_prefix
         s3 = S3()
 
