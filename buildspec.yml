@@ -16,13 +16,13 @@ phases:
       - pwd
       - ls
       - pip install -r requirements.txt
-      - . ./run_tests.sh fail "*unit*.*"
-      - . ./run_tests.sh fail "*int*.*"
+      - bash ./run_tests.sh fail "*unit*.*"
+      - bash ./run_tests.sh fail "*int*.*"
       - sam validate -t template.yaml
       - sam build
       - sam package --output-template-file packaged-test.yaml --s3-bucket $S3_ARTIFACTS
       - sam package --output-template-file packaged-prod.yaml --s3-bucket $S3_ARTIFACTS
       - sam deploy --template-file packaged-test.yaml --stack-name twilio-receiver-test --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=test  --parameter-overrides StackNamePrefix=test
-      - . ./run_tests.sh fail "*e2e*.*"
+      - bash ./run_tests.sh fail "*e2e*.*"
       - sam deploy --template-file packaged-prod.yaml --stack-name twilio-receiver-prod --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod
       -  # sam deploy --template-file packaged.yaml --stack-name twilio-receiver --capabilities CAPABILITY_IAM  --tags Type=twilio Environment=prod  --parameter-overrides StackNamePrefix=prod

@@ -7,8 +7,6 @@ rm reports/*.*
 echo "Args: $1, $2"
 
 
-
-
 if [[ $1 == "simple" ]] 
 then
     echo "Running simple ..."
