@@ -37,7 +37,11 @@ class ReminderSender:
             print(f"Checking '{reminder.name}'")
             if self._should_send_text(reminder):
                 print("Attempting to send text.")
-                twilio_response = self._twilio.send_text("1234567", reminder.name)
+                text_message = f"""⏰ Reminder
+{reminder.name}
+Text 'done' to mark as done.
+"""
+                twilio_response = self._twilio.send_text("+19193229617", text_message)
                 print("Text sent.")
                 if twilio_response.confirmation == "":
                     raise TwilioTextFailed(

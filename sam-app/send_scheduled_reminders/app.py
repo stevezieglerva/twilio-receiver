@@ -49,7 +49,7 @@ def get_secret(secret_name: str):
     get_secret_value_response = client.get_secret_value(SecretId=secret_name)
     if "SecretString" in get_secret_value_response:
         secret = get_secret_value_response["SecretString"]
-        return secret
+        return json.loads(secret)
     else:
         decoded_binary_secret = base64.b64decode(
             get_secret_value_response["SecretBinary"]
