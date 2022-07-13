@@ -13,7 +13,7 @@ from domain.RemindersDTO import *
 @dataclass(frozen=True)
 class SentReminderText:
     reminder: Reminder
-    sms_text: SMSText
+    sms_text: List[SMSText]
 
 
 class TwilioTextFailed(Exception):
@@ -41,37 +41,48 @@ class ReminderSender:
         reminders = self._repo.get_reminders()
         for reminder in reminders:
             print(f"\nChecking '{reminder}'")
+
             if self._should_send_text(reminder):
                 print("Attempting to send text.")
-                reminder_occurrence = ""
-                if reminder.occurences > 1:
-                    reminder_occurrence = f"#{reminder.occurences + 1}"
-                text_message = f"""
-⏰ Reminder {reminder_occurrence}
-{reminder.name}
-
-Sent: {datetime.now().isoformat()}
-Text 'done' to mark as done.
-"""
-                twilio_response = self._twilio.send_text("+19193229617", text_message)
-                print("Text sent:")
-                print(f"{text_message}")
-                if twilio_response.confirmation == "":
-                    raise TwilioTextFailed(
-                        f"Couldn't send text to {twilio_response.phone_number} for the reminder '{reminder.name}'"
-                    )
+                text_message = self._create_reminder_text(reminder)
                 updated_reminder = Reminder(
                     name=reminder.name,
                     times=reminder.times,
+                    phone_numbers=reminder.phone_numbers,
                     status=ReminderStatuses.ACTIVE,
                     last_sent=self._clock.get_time().isoformat(),
                     occurences=reminder.occurences + 1,
                 )
-                print(f"\tSending reminder for '{updated_reminder.name}'")
-                self._repo.save_reminder(updated_reminder)
-                sent_reminders.append(updated_reminder)
+                for phone_number in reminder.phone_numbers:
+                    twilio_response = self._twilio.send_text(phone_number, text_message)
+                    print(f"Text sent to: {phone_number}")
+                    print(f"{text_message}")
+                    if twilio_response.confirmation == "":
+                        raise TwilioTextFailed(
+                            f"Couldn't send text to {twilio_response.phone_number} for the reminder '{reminder.name}'"
+                        )
 
+                    sms_reminder_result = SentReminderText(
+                        updated_reminder, twilio_response
+                    )
+                    sent_reminders.append(sms_reminder_result)
+
+                print(f"\tUpdating DB for '{updated_reminder}'")
+                self._repo.save_reminder(updated_reminder)
         return sent_reminders
+
+    def _create_reminder_text(self, reminder):
+        reminder_occurrence = ""
+        if reminder.occurences > 1:
+            reminder_occurrence = f"#{reminder.occurences + 1}"
+        text_message = f"""
+⏰ Reminder {reminder_occurrence}
+{reminder.name}
+Sent: {datetime.now().isoformat()}
+Text 'done' to mark as done.
+"""
+
+        return text_message
 
     def _should_send_text(self, reminder):
         now = self._clock.get_time()
