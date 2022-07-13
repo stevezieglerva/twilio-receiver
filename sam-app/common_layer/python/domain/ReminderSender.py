@@ -13,7 +13,7 @@ from domain.RemindersDTO import *
 @dataclass(frozen=True)
 class SentReminderText:
     reminder: Reminder
-    sms_text: List[SMSText]
+    sms_texts: List[SMSText]
 
 
 class TwilioTextFailed(Exception):
@@ -53,6 +53,8 @@ class ReminderSender:
                     last_sent=self._clock.get_time().isoformat(),
                     occurences=reminder.occurences + 1,
                 )
+
+                sms_text_list = []
                 for phone_number in reminder.phone_numbers:
                     twilio_response = self._twilio.send_text(phone_number, text_message)
                     print(f"Text sent to: {phone_number}")
@@ -61,11 +63,10 @@ class ReminderSender:
                         raise TwilioTextFailed(
                             f"Couldn't send text to {twilio_response.phone_number} for the reminder '{reminder.name}'"
                         )
+                    sms_text_list.append(twilio_response)
 
-                    sms_reminder_result = SentReminderText(
-                        updated_reminder, twilio_response
-                    )
-                    sent_reminders.append(sms_reminder_result)
+                sms_reminder_result = SentReminderText(updated_reminder, sms_text_list)
+                sent_reminders.append(sms_reminder_result)
 
                 print(f"\tUpdating DB for '{updated_reminder}'")
                 self._repo.save_reminder(updated_reminder)
