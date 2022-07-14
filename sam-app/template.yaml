@@ -18,10 +18,10 @@ Parameters:
       - prod
     Description: Environment prefix for stack resources
 
-  SenderCronSchedule:
-    Type: String
-    Default: "cron(0,10,20,30,40,50 * ? * * *)" # "0 0 5 31 2 ?"  fake scheudle will never happen
-    Description: Cron schedule for the lambda
+Conditions:
+  IsProd: !Equals
+    - !Ref StackNamePrefix
+    - prod
 
 Resources:
   TwilioWebHookFunction:
@@ -65,7 +65,12 @@ Resources:
       Events:
         CronEvent:
           Properties:
-            Schedule: !Ref SenderCronSchedule
+            Schedule:
+              !If [
+                IsProd,
+                "cron(0,10,20,30,40,50 * ? * * *)",
+                "rate(2 minutes)",
+              ]
           Type: Schedule
 
   TwilioLayer:
