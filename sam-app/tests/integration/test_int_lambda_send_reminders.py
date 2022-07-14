@@ -15,7 +15,7 @@ class SendRemindersIntegrationTests(unittest.TestCase):
         # Arrange
         bucket = "twilio-apps"
         os.environ["S3_BUCKET"] = bucket
-        key_prefix = "test/integration"
+        key_prefix = "test/integation"
         os.environ["S3_KEY_PREFIX"] = key_prefix
         s3 = S3()
 
@@ -29,13 +29,13 @@ class SendRemindersIntegrationTests(unittest.TestCase):
 
         # Act
         # send several reminders to show the occurrences increase
-        results = lambda_handler({}, "")
+        results = lambda_handler({"s3_key_prefix": "test/integration"}, "")
         sleep(5)
-        results = lambda_handler({}, "")
+        results = lambda_handler({"s3_key_prefix": "test/integration"}, "")
         sleep(5)
-        results = lambda_handler({}, "")
+        results = lambda_handler({"s3_key_prefix": "test/integration"}, "")
         sleep(5)
-        results = lambda_handler({}, "")
+        results = lambda_handler({"s3_key_prefix": "test/integration"}, "")
         print(f"test results: {json.dumps(results, indent=3, default=str)}")
 
         # Assert

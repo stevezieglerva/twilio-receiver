@@ -25,6 +25,11 @@ def lambda_handler(event, context):
     key_prefix = os.environ["S3_KEY_PREFIX"]
     print(f"key_prefix: {key_prefix}")
 
+    key_prefix_from_event = event.get("s3_key_prefix", "")
+    if key_prefix_from_event != "":
+        print(f"key_prefix_from_event pased in: {key_prefix_from_event}")
+        key_prefix = key_prefix_from_event
+
     clock = RealClock()
     s3 = S3()
     repo = S3Repo(bucket, key_prefix, s3)
