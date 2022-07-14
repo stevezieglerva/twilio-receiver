@@ -4,6 +4,7 @@ from datetime import datetime
 from unittest.mock import MagicMock, Mock, PropertyMock, patch
 
 from Clock import FakeClock, RealClock
+from pytz import UTC
 
 
 class FakeClockUnitTests(unittest.TestCase):
@@ -16,7 +17,7 @@ class FakeClockUnitTests(unittest.TestCase):
         print(f"test results: {results}")
 
         # Assert
-        self.assertEqual(results, datetime(2022, 1, 1, 9, 0, 1))
+        self.assertEqual(results, datetime(2022, 1, 1, 9, 0, 1, tzinfo=UTC))
 
 
 class RealClockUnitTests(unittest.TestCase):

@@ -10,10 +10,16 @@ class ITellingTime:
     def get_time(self) -> datetime:
         raise NotImplementedError()
 
+    def convert_est_to_utc(self, est_datetime: datetime):
+        local_tz = pytz.timezone("America/New_York")
+        localdt = local_tz.localize(est_datetime)
+        return localdt.astimezone(pytz.UTC)
+
 
 class FakeClock(ITellingTime):
     def __init__(self, datetime_str: str):
-        self._time = parse(datetime_str)
+        time = parse(datetime_str)
+        self._time = pytz.utc.localize(time)
 
     def get_time(self):
         return self._time
@@ -25,8 +31,3 @@ class RealClock(ITellingTime):
             return pytz.utc.localize(datetime.utcnow())
         utc = pytz.utc.localize(datetime.utcnow())
         return utc.astimezone(pytz.timezone(timezone))
-
-    def convert_est_to_utc(self, est_datetime: datetime):
-        local_tz = pytz.timezone("America/New_York")
-        localdt = local_tz.localize(est_datetime)
-        return localdt.astimezone(pytz.UTC)
