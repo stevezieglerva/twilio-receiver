@@ -8,6 +8,7 @@ import boto3
 from domain.ReminderSender import *
 from infrastructure.repository.S3 import *
 from infrastructure.repository.StorageRepo import *
+from infrastructure.system.Clock import *
 from send_scheduled_reminders.app import *
 
 
@@ -52,7 +53,11 @@ class SendRemindersIntegrationTests(unittest.TestCase):
         s3.delete_object(bucket, old_file_to_delete)
 
         repo = S3Repo(bucket, key_prefix, s3)
-        few_mins_ago = datetime.now() - timedelta(minutes=3)
+        clock = RealClock()
+        few_mins_ago = clock.get_time("America/New_York") - timedelta(minutes=3)
+        print(
+            f"Getting EST time {few_mins_ago} for reminder compared to {datetime.now()}"
+        )
         alarm_time = few_mins_ago.strftime("%H:%M")
         print(f"Testing with alarm time {alarm_time}")
         repo.save_reminder(
