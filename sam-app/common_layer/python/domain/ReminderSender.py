@@ -95,17 +95,18 @@ Text 'done' to mark as done.
                 reminder_time_for_today
             )
             print(
-                f"\tAt {self._clock.get_time()}, reminder is {reminder.status} for {utc_reminder_for_today}"
+                f"\tAt {now}, reminder is {reminder.status} for {utc_reminder_for_today}"
             )
             if reminder.status == ReminderStatuses.DONE:
                 print(f"\tReminder is done. Skipping")
                 return False
 
             print(
-                f"""Comparing 
-{utc_reminder_for_today} alarm to 
-{now} now"""
+                f"""\tComparing 
+\t{utc_reminder_for_today} alarm to 
+\t{now} now"""
             )
             if now >= utc_reminder_for_today:
+                print(f"\t\tReminder is due.")
                 return True
         return False

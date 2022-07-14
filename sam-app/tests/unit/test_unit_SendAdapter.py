@@ -12,11 +12,9 @@ from infrastructure.notifications.TwilioClient import FakeTwilio
 class SendAdapterUnitTests(unittest.TestCase):
     def test_should_send_notifications_on_cron_event(self):
         # Arrange
-        clock = Clock.FakeClock("2020-01-01 09:00:01")
+        clock = Clock.FakeClock("2020-01-01 10:00:01")
         repo = StorageRepo.FakeRepo()
-        repo.save_reminder(
-            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"], ["333"])
-        )
+        repo.save_reminder(RemindersDTO.Reminder("Take medicine", ["05:00"], ["333"]))
         twilio = FakeTwilio("abc", "123")
         reminder_sender = ReminderSender.ReminderSender(clock, repo, twilio)
 
