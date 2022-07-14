@@ -74,13 +74,16 @@ class ReminderSender:
         return sent_reminders
 
     def _create_reminder_text(self, reminder):
+        date_display = self._clock.get_time("America/New_York").strftime(
+            "%m/%d/%Y %H:%M:%S"
+        )
         reminder_occurrence = ""
         if reminder.occurences > 1:
             reminder_occurrence = f"#{reminder.occurences + 1}"
         text_message = f"""
 ⏰ Reminder {reminder_occurrence}
 {reminder.name}
-Sent: {datetime.now().strftime("%m/%d/%Y %H:%M:%S")}
+Sent: {date_display}
 Text 'done' to mark as done.
 """
 
