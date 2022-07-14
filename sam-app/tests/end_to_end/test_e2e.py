@@ -12,9 +12,7 @@ class EndToEndTests(unittest.TestCase):
     def test_should_send_necessary_reminders(self):
         # Arrange
         bucket = "twilio-apps"
-        os.environ["S3_BUCKET"] = bucket
         key_prefix = "test/end_to_end"
-        os.environ["S3_KEY_PREFIX"] = key_prefix
         s3 = S3()
 
         s3.delete_object(bucket, f"{key_prefix}/reminders.json")
@@ -25,13 +23,16 @@ class EndToEndTests(unittest.TestCase):
 
         # Act
         l = boto3.client("lambda")
-        results = l.invoke(FunctionName="twilio-send-reminders-test", Payload=b"{}")
+        results = l.invoke(
+            FunctionName="twilio-send-reminders-test",
+            Payload=b'{"s3_key_prefix" : "test/end_to_end"}',
+        )
         payload = results["Payload"].read()
         payload_json = json.loads(payload)
         print(f"test results: {json.dumps(payload_json, indent=3, default=str)}")
 
         # Assert
-        reminders_sent = [r["name"] for r in payload_json]
+        reminders_sent = [r["reminder"]["name"] for r in payload_json]
         self.assertTrue("e2e test - Take medicine" in reminders_sent)
 
 
