@@ -17,7 +17,7 @@ phases:
       - ls
       - pip install -r requirements.txt
       - bash ./run_tests.sh fail "*unit*.*"
-      - bash ./run_tests.sh simple "*int*lambda*.*"
+      - bash ./run_tests.sh fail "*int*.*"
       - sam validate -t template.yaml
       - sam build
       - sam package --output-template-file packaged-test.yaml --s3-bucket $S3_ARTIFACTS

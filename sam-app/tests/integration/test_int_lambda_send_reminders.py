@@ -78,38 +78,38 @@ class SendRemindersIntegrationTests(unittest.TestCase):
             "integration lambda test with timezone - Sweep floor 🧹",
         )
 
-    # def test_should_send_not_necessary_reminders_given_timezones(self):
-    #     # Arrange
-    #     bucket = "twilio-apps"
-    #     os.environ["S3_BUCKET"] = bucket
-    #     key_prefix = "test/integation-timezone-b"
-    #     os.environ["S3_KEY_PREFIX"] = key_prefix
-    #     s3 = S3()
-    #     old_file_to_delete = f"{key_prefix}/reminders.json"
-    #     print(f"Deleting {old_file_to_delete}")
-    #     s3.delete_object(bucket, old_file_to_delete)
+    def test_should_send_not_necessary_reminders_given_timezones(self):
+        # Arrange
+        bucket = "twilio-apps"
+        os.environ["S3_BUCKET"] = bucket
+        key_prefix = "test/integation-timezone-b"
+        os.environ["S3_KEY_PREFIX"] = key_prefix
+        s3 = S3()
+        old_file_to_delete = f"{key_prefix}/reminders.json"
+        print(f"Deleting {old_file_to_delete}")
+        s3.delete_object(bucket, old_file_to_delete)
 
-    #     repo = S3Repo(bucket, key_prefix, s3)
-    #     few_mins_ahead = datetime.now() + timedelta(minutes=3)
-    #     alarm_time = few_mins_ahead.strftime("%H:%M")
-    #     print(f"Testing with alarm time {alarm_time}")
-    #     repo.save_reminder(
-    #         Reminder(
-    #             "integration lambda test with timezone - Wash car 🚙",
-    #             [alarm_time],
-    #             ["+19193229617"],
-    #         )
-    #     )
+        repo = S3Repo(bucket, key_prefix, s3)
+        few_mins_ahead = datetime.now() + timedelta(minutes=3)
+        alarm_time = few_mins_ahead.strftime("%H:%M")
+        print(f"Testing with alarm time {alarm_time}")
+        repo.save_reminder(
+            Reminder(
+                "integration lambda test with timezone - Wash car 🚙",
+                [alarm_time],
+                ["+19193229617"],
+            )
+        )
 
-    #     # Act
-    #     # send several reminders to show the occurrences increase
-    #     results = lambda_handler({"s3_key_prefix": key_prefix}, "")
+        # Act
+        # send several reminders to show the occurrences increase
+        results = lambda_handler({"s3_key_prefix": key_prefix}, "")
 
-    #     # Assert
-    #     self.assertEqual(
-    #         len(results),
-    #         0,
-    #     )
+        # Assert
+        self.assertEqual(
+            len(results),
+            0,
+        )
 
 
 if __name__ == "__main__":
