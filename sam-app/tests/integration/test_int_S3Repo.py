@@ -27,7 +27,7 @@ class S3RepoIntegrationTests(unittest.TestCase):
 
         # Act
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
+            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"], ["111"])
         )
 
         # Assert
@@ -39,13 +39,13 @@ class S3RepoIntegrationTests(unittest.TestCase):
         s3 = S3.S3()
         subject = StorageRepo.S3Repo("twilio-apps", "integration_testing_c", s3)
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"])
+            RemindersDTO.Reminder("Take medicine", ["09:00", "10:00"], ["111"])
         )
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine 2", ["12:00", "13:00"])
+            RemindersDTO.Reminder("Take medicine 2", ["12:00", "13:00"], ["111"])
         )
         subject.save_reminder(
-            RemindersDTO.Reminder("Take medicine 3", ["15:00", "16:00"])
+            RemindersDTO.Reminder("Take medicine 3", ["15:00", "16:00"], ["111"])
         )
 
         # Act
@@ -53,6 +53,7 @@ class S3RepoIntegrationTests(unittest.TestCase):
             RemindersDTO.Reminder(
                 name="Take medicine 2",
                 times=["12:00", "13:00"],
+                phone_numbers=["111"],
                 status=RemindersDTO.ReminderStatuses.ACTIVE,
             )
         )

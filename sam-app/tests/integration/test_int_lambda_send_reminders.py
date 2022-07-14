@@ -22,7 +22,9 @@ class SendRemindersIntegrationTests(unittest.TestCase):
         s3.delete_object(bucket, f"{key_prefix}/reminders.json")
         repo = S3Repo(bucket, key_prefix, s3)
         repo.save_reminder(
-            Reminder("integration lambda test - Take medicine", ["00:00"])
+            Reminder(
+                "integration lambda test - Take medicine", ["00:00"], ["+19193229617"]
+            )
         )
 
         # Act
@@ -37,7 +39,9 @@ class SendRemindersIntegrationTests(unittest.TestCase):
         print(f"test results: {json.dumps(results, indent=3, default=str)}")
 
         # Assert
-        self.assertEqual(results[0]["name"], "integration lambda test - Take medicine")
+        self.assertEqual(
+            results[0]["reminder"]["name"], "integration lambda test - Take medicine"
+        )
 
 
 if __name__ == "__main__":
