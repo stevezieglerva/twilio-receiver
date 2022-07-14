@@ -23,7 +23,6 @@ class RealClock(ITellingTime):
     def get_time(self, timezone: str = ""):
         if timezone == "":
             return pytz.utc.localize(datetime.utcnow())
-
         utc = pytz.utc.localize(datetime.utcnow())
         return utc.astimezone(pytz.timezone(timezone))
 

@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 
+import pytz
 from dateutil.parser import *
 from infrastructure.notifications.TwilioClient import *
 from infrastructure.repository.StorageRepo import *
@@ -79,7 +80,7 @@ class ReminderSender:
         text_message = f"""
 ⏰ Reminder {reminder_occurrence}
 {reminder.name}
-Sent: {datetime.now().isoformat()}
+Sent: {datetime.now().strftime("%m/%d/%Y %H:%M:%S")}
 Text 'done' to mark as done.
 """
 
@@ -90,12 +91,21 @@ Text 'done' to mark as done.
         for reminder_time in reminder.times:
             reminder_time_str = f"{now.year}-{now.month}-{now.day} {reminder_time}"
             reminder_time_for_today = parse(reminder_time_str)
+            utc_reminder_for_today = self._clock.convert_est_to_utc(
+                reminder_time_for_today
+            )
             print(
-                f"\tAt {self._clock.get_time()}, reminder is {reminder.status} for {reminder_time_for_today}"
+                f"\tAt {self._clock.get_time()}, reminder is {reminder.status} for {utc_reminder_for_today}"
             )
             if reminder.status == ReminderStatuses.DONE:
                 print(f"\tReminder is done. Skipping")
                 return False
-            if now >= reminder_time_for_today:
+
+            print(
+                f"""Comparing 
+{utc_reminder_for_today} alarm to 
+{now} now"""
+            )
+            if now >= utc_reminder_for_today:
                 return True
         return False
