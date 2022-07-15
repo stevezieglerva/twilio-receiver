@@ -64,31 +64,6 @@ class SMSCommandProcessorIntTests(unittest.TestCase):
             results.result_details, "✅ 'Take medicine' marked as done by +123456789."
         )
 
-    def test_should_inactive_reminder_record_when_done_sent(self):
-        # Arrange
-        clock = FakeClock("2020-01-01 10:00:01")
-        s3 = S3FakeLocal()
-        repo = S3Repo("fake-bucket", "unit-test", s3)
-        repo.save_reminder(
-            Reminder(
-                "Take medicine", ["05:00"], ["444"], status=ReminderStatuses.ACTIVE
-            )
-        )
-        twilio = FakeTwilio("abc", "123")
-        subject = SMSCommandProcessor(repo, clock, twilio)
-
-        # Act
-        results = subject.process_command(
-            SMSCommand(
-                body="done", from_phone_number="+123456789", sms_message_id="12345"
-            )
-        )
-        print(f"test results: {results}")
-
-        # Assert
-        updated_reminder = repo.get_reminder("Take medicine")
-        self.assertEqual(updated_reminder.status, ReminderStatuses.INACTIVE)
-
 
 if __name__ == "__main__":
     unittest.main()
