@@ -22,9 +22,9 @@ def lambda_handler(event, context):
     print("Starting ...")
     clock = RealClock()
     now_gmt = clock.get_time()
-    print(f"now_gmt: {now_gmt}")
+    print(f"now_gmt:  {now_gmt}")
     now_est = clock.get_time("America/New_York")
-    print(f"now_est: {now_est}")
+    print(f"now_est:  {now_est}")
 
     print(f"event: {event}")
     bucket = os.environ["S3_BUCKET"]
