@@ -32,6 +32,10 @@ class IStoringReminders(ABC):
     def get_all_data(self) -> RemindersDB:
         raise NotImplementedError()
 
+    @abstractclassmethod
+    def get_active_reminder(self) -> Reminder:
+        raise NotImplementedError()
+
 
 class FakeRepo(IStoringReminders):
     def __init__(self):
@@ -55,6 +59,9 @@ class FakeRepo(IStoringReminders):
         return RemindersDB(
             db_last_update=datetime.now().isoformat(), reminders=self._reminders
         )
+
+    def get_active_reminder(self) -> Reminder:
+        raise NotImplementedError()
 
 
 class S3Repo(IStoringReminders):
@@ -102,3 +109,10 @@ class S3Repo(IStoringReminders):
         return RemindersDB(
             db_last_update=parse(data_json["db_last_update"]), reminders=reminders_list
         )
+
+    def get_active_reminder(self) -> Reminder:
+        reminders = self.get_reminders()
+        for reminder in reminders:
+            if reminder.status == ReminderStatuses.ACTIVE:
+                return reminder
+        return None
