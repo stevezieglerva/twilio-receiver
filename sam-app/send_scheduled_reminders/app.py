@@ -19,6 +19,13 @@ from SendAdapter import *
 
 
 def lambda_handler(event, context):
+    print("Starting ...")
+    clock = RealClock()
+    now_gmt = clock.get_time()
+    print(f"now_gmt: {now_gmt}")
+    now_est = clock.get_time("America/New_York")
+    print(f"now_est: {now_est}")
+
     print(f"event: {event}")
     bucket = os.environ["S3_BUCKET"]
     print(f"bucket: {bucket}")
@@ -30,7 +37,6 @@ def lambda_handler(event, context):
         print(f"key_prefix_from_event pased in: {key_prefix_from_event}")
         key_prefix = key_prefix_from_event
 
-    clock = RealClock()
     s3 = S3()
     repo = S3Repo(bucket, key_prefix, s3)
     twilio_keys = get_secret("twilio")
