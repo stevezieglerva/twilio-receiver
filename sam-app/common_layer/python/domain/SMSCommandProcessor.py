@@ -39,7 +39,7 @@ class SMSCommandProcessor:
                 occurences=0,
             )
             self._s3_repo.save_reminder(inactivated_reminder)
-            update_message = f"'{inactivated_reminder.name}' marked as done by {command.from_phone_number}."
+            update_message = f"✅ '{inactivated_reminder.name}' marked as done by {command.from_phone_number}."
             for phone_number in inactivated_reminder.phone_numbers:
                 self._twilio_client.send_text(phone_number, update_message)
 
@@ -54,5 +54,5 @@ class SMSCommandProcessor:
             timestamp=self._clock.get_time().isoformat(),
             command=command,
             result="error",
-            result_details=f"'{command.body}' is an unknown commmand.",
+            result_details=f"⁉️ '{command.body}' is an unknown commmand.",
         )

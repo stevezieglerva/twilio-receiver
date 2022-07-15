@@ -35,7 +35,7 @@ class SMSCommandProcessorUnitTests(unittest.TestCase):
         self.assertEqual(results.command.body, "done")
         self.assertEqual(results.result, "ok")
         self.assertEqual(
-            results.result_details, "'Take medicine' marked as done by +123456789."
+            results.result_details, "✅ 'Take medicine' marked as done by +123456789."
         )
 
     def test_should_inactive_reminder_record_when_done_sent(self):
@@ -86,7 +86,9 @@ class SMSCommandProcessorUnitTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(results.result, "error")
-        self.assertEqual(results.result_details, "'dkskdskd' is an unknown commmand.")
+        self.assertEqual(
+            results.result_details, "⁉️ 'dkskdskd' is an unknown commmand."
+        )
 
 
 if __name__ == "__main__":
