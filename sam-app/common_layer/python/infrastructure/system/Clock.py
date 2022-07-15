@@ -7,7 +7,7 @@ from dateutil.parser import *
 
 class ITellingTime:
     @abstractmethod
-    def get_time(self) -> datetime:
+    def get_time(self, timezone: str = "") -> datetime:
         raise NotImplementedError()
 
     def convert_est_to_utc(self, est_datetime: datetime):
@@ -21,7 +21,7 @@ class FakeClock(ITellingTime):
         time = parse(datetime_str)
         self._time = pytz.utc.localize(time)
 
-    def get_time(self):
+    def get_time(self, timezone: str = ""):
         return self._time
 
 
