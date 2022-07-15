@@ -26,7 +26,7 @@ def get_secret(secret_name: str):
         return decoded_binary_secret
 
 
-class SMSCommandProcessorUnitTests(unittest.TestCase):
+class SMSCommandProcessorIntTests(unittest.TestCase):
     def test_should_return_inactive_info_when_done_sent(self):
         # Arrange
         clock = RealClock()
