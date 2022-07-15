@@ -1,6 +1,7 @@
 test_fakes3*.*
 data/**/*.json
 sam-app/reports/*.*
+**/*fake*.*
 
 
 # Byte-compiled / optimized / DLL files

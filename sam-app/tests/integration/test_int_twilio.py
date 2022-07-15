@@ -31,8 +31,7 @@ class TwilioUnitTests(unittest.TestCase):
     def test_should_send_text(self):
         # Arrange
         keys = json.loads(get_secret("twilio"))
-        print(keys)
-        print(type(keys))
+
         account_sid = keys["TWILIO_ACCOUNT_SID"]
         auth_token = keys["TWILIO_AUTH_TOKEN"]
         subject = Twilio(account_sid, auth_token)

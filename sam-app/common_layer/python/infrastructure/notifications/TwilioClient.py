@@ -30,6 +30,10 @@ class FakeTwilio(IProcessingTexts):
         self._twilio_auth_token = twilio_auth_token
 
     def send_text(self, phone_number: str, text: str) -> SMSText:
+        filename = f"text_fake_{phone_number}_{datetime.now().isoformat()}.txt"
+        with open(filename, "w") as file:
+            file.write(text)
+
         return SMSText(
             phone_number, text, datetime.now().isoformat(), "fake-confirmation"
         )
