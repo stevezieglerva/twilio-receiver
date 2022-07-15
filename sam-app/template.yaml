@@ -31,6 +31,21 @@ Resources:
       CodeUri: twilio_webhook/
       Handler: app.lambda_handler
       Runtime: python3.7
+      Policies:
+        - S3CrudPolicy:
+            BucketName: "twilio-apps"
+        - Statement:
+            - Sid: Secrets
+              Action:
+                - secretsmanager:DescribeSecret
+                - secretsmanager:GetSecretValue
+              Effect: Allow
+              Resource:
+                - "*"
+      Environment:
+        Variables:
+          S3_BUCKET: "twilio-apps"
+          S3_KEY_PREFIX: !Ref StackNamePrefix
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api

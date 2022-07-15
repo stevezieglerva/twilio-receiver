@@ -30,7 +30,9 @@ class CommandAdapterUnitTests(unittest.TestCase):
         # Act
         # Act
         results = subject.process_command(
-            "ToCountry=US&ToState=MI&SmsMessageSid=SM99649d01253fc588396cd1eec8377273&NumMedia=0&ToCity=COLEMAN&FromZip=22036&SmsSid=SM99649d01253fc588396cd1eec8377273&FromState=VA&SmsStatus=received&FromCity=CENTREVILLE&Body=done&FromCountry=US&To=%2B19894655460&ToZip=48612&NumSegments=1&ReferralNumMedia=0&MessageSid=SM99649d01253fc588396cd1eec8377273&AccountSid=ACec8e197bef5e214e76eecfabee4107cc&From=%2B17039750614&ApiVersion=2010-04-01"
+            {
+                "body": "ToCountry=US&ToState=MI&SmsMessageSid=SM99649d01253fc588396cd1eec8377273&NumMedia=0&ToCity=COLEMAN&FromZip=22036&SmsSid=SM99649d01253fc588396cd1eec8377273&FromState=VA&SmsStatus=received&FromCity=CENTREVILLE&Body=done&FromCountry=US&To=%2B19894655460&ToZip=48612&NumSegments=1&ReferralNumMedia=0&MessageSid=SM99649d01253fc588396cd1eec8377273&AccountSid=ACec8e197bef5e214e76eecfabee4107cc&From=%2B17039750614&ApiVersion=2010-04-01"
+            }
         )
         print(f"test results: {results}")
 

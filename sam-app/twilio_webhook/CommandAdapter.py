@@ -8,7 +8,8 @@ class CommandAdapter:
     def __init__(self, sms_command_processor: SMSCommandProcessor):
         self._sms_command_processor = sms_command_processor
 
-    def process_command(self, twilio_text_body: str) -> SMSCommandResult:
+    def process_command(self, event: dict) -> SMSCommandResult:
+        twilio_text_body = event.get("body", "")
         body_fields = twilio_text_body.split("&")
         body_encoded = [f for f in body_fields if f.startswith("Body=")][0]
         body_encoded = body_encoded.replace("Body=", "")
