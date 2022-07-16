@@ -128,32 +128,7 @@ class RemindersUnitTests(unittest.TestCase):
     #     # Assert
     #     self.assertEqual(results, [])
 
-    def test_should_stop_sending_when_marked_done(self):
-        # Arrange
-
-        clock_10AM = Clock.FakeClock("2020-01-01 15:00:01")
-        s3 = S3FakeLocal()
-        repo = StorageRepo.S3Repo("fake-bucket", "test/unit-test/second_time", s3)
-        repo.save_reminder(
-            RemindersDTO.Reminder("Take medicine", ["10:00", "13:00"], ["444"])
-        )
-        twilio = FakeTwilio("abc", "123")
-        initial_sender = ReminderSender.ReminderSender(clock_10AM, repo, twilio)
-
-        # Send first 10AM reminder and mark done
-        results = initial_sender.send_needed_reminder_texts()
-        command_proc = SMSCommandProcessor(repo, clock_10AM, twilio)
-        results = command_proc.process_command(SMSCommand("done", "444", "789"))
-
-        # Act
-        results = initial_sender.send_needed_reminder_texts()
-
-        print(f"test results: {results}")
-
-        # Assert
-        self.assertEqual(len(results), 0)
-
-    # def test_should_send_second_reminder_if_first_marked_done(self):
+    # def test_should_stop_sending_when_marked_done(self):
     #     # Arrange
 
     #     clock_10AM = Clock.FakeClock("2020-01-01 15:00:01")
@@ -171,15 +146,40 @@ class RemindersUnitTests(unittest.TestCase):
     #     results = command_proc.process_command(SMSCommand("done", "444", "789"))
 
     #     # Act
-    #     clock_1PM = Clock.FakeClock("2020-01-01 17:00:01")
-    #     subject = ReminderSender.ReminderSender(clock_1PM, repo, twilio)
-    #     results = subject.send_needed_reminder_texts()
+    #     results = initial_sender.send_needed_reminder_texts()
 
     #     print(f"test results: {results}")
 
     #     # Assert
-    #     self.assertEqual(results[0].reminder.name, "Take medicine")
-    #     self.assertEqual(results[0].sms_texts[0].phone_number, "444")
+    #     self.assertEqual(len(results), 0)
+
+    def test_should_send_second_reminder_if_first_marked_done(self):
+        # Arrange
+
+        clock_10AM = Clock.FakeClock("2020-01-01 15:00:01")
+        s3 = S3FakeLocal()
+        repo = StorageRepo.S3Repo("fake-bucket", "test/unit-test/second_time", s3)
+        repo.save_reminder(
+            RemindersDTO.Reminder("Take medicine", ["10:00", "13:00"], ["444"])
+        )
+        twilio = FakeTwilio("abc", "123")
+        initial_sender = ReminderSender.ReminderSender(clock_10AM, repo, twilio)
+
+        # Send first 10AM reminder and mark done
+        results = initial_sender.send_needed_reminder_texts()
+        command_proc = SMSCommandProcessor(repo, clock_10AM, twilio)
+        results = command_proc.process_command(SMSCommand("done", "444", "789"))
+
+        # Act
+        clock_1PM = Clock.FakeClock("2020-01-01 17:00:01")
+        subject = ReminderSender.ReminderSender(clock_1PM, repo, twilio)
+        results = subject.send_needed_reminder_texts()
+
+        print(f"test results: {results}")
+
+        # Assert
+        self.assertEqual(results[0].reminder.name, "Take medicine")
+        self.assertEqual(results[0].sms_texts[0].phone_number, "444")
 
 
 if __name__ == "__main__":

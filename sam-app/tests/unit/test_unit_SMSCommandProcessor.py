@@ -66,7 +66,7 @@ class SMSCommandProcessorUnitTests(unittest.TestCase):
             results.result_details, "✅ 'Take medicine' marked as done by +123456789."
         )
 
-    def test_should_inactive_reminder_record_when_done_sent(self):
+    def test_should_inactivate_reminder_record_when_done_sent(self):
         # Arrange
         clock = FakeClock("2020-01-01 10:00:01")
         s3 = S3FakeLocal()
@@ -89,7 +89,8 @@ class SMSCommandProcessorUnitTests(unittest.TestCase):
 
         # Assert
         updated_reminder = repo.get_reminder("Take medicine")
-        self.assertEqual(updated_reminder.status, ReminderStatuses.INACTIVE)
+        self.assertEqual(updated_reminder.status, ReminderStatuses.DONE)
+        self.assertNotEqual(updated_reminder.last_set_to_done, "")
 
     def test_should_return_error_if_unknown_command(self):
         # Arrange

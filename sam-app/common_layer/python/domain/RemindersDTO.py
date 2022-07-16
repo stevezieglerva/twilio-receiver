@@ -21,6 +21,7 @@ class Reminder:
     status: str = ReminderStatuses.INACTIVE
     last_sent: str = ""
     occurences: int = 0
+    last_set_to_done: str = ""
 
 
 class DuplicateReminderNameException(ValueError):
