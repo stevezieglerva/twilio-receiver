@@ -28,7 +28,7 @@ class SMSCommandProcessor:
         self._twilio_client = twilio_client
 
     def process_command(self, command: SMSCommand) -> SMSCommandResult:
-        if command.body == SMSCommands.DONE:
+        if command.body.lower() == SMSCommands.DONE:
             active_reminder = self._s3_repo.get_active_reminder()
             inactivated_reminder = Reminder(
                 name=active_reminder.name,
