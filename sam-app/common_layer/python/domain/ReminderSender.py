@@ -40,8 +40,8 @@ class ReminderSender:
     def send_needed_reminder_texts(self) -> List[SentReminderText]:
         sent_reminders = []
         reminders = self._repo.get_reminders()
-        for reminder in reminders:
-            print(f"\nChecking '{reminder}'")
+        for count, reminder in enumerate(reminders):
+            print(f"\nChecking #{count+1}: '{reminder}'")
 
             if self._should_send_text(reminder):
                 print("Attempting to send text.")
@@ -91,18 +91,25 @@ Text 'done' to mark as done.
 
     def _should_send_text(self, reminder):
         now = self._clock.get_time()
-        for reminder_time in reminder.times:
+        for count, reminder_time in enumerate(reminder.times):
+            print(f"\n\tChecking time #{count+1}: '{reminder_time}'")
             reminder_time_str = f"{now.year}-{now.month}-{now.day} {reminder_time}"
             reminder_time_for_today = parse(reminder_time_str)
             utc_reminder_for_today = self._clock.convert_est_to_utc(
                 reminder_time_for_today
             )
+
             print(
-                f"\tAt {now}, reminder is {reminder.status} for {utc_reminder_for_today}"
+                f"\tAt {now}, reminder is {reminder.status} scheduled for {utc_reminder_for_today} "
             )
-            if reminder.status == ReminderStatuses.DONE:
-                print(f"\tReminder is done. Skipping")
-                return False
+            if reminder.last_set_to_done != "":
+                last_set_to_done = parse(reminder.last_set_to_done)
+                if (
+                    reminder.status == ReminderStatuses.DONE
+                    and utc_reminder_for_today < last_set_to_done
+                ):
+                    print(f"\tReminder is done. Skipping")
+                    continue
 
             print(
                 f"""\tComparing 
@@ -110,6 +117,6 @@ Text 'done' to mark as done.
 \t{now} now"""
             )
             if now >= utc_reminder_for_today:
-                print(f"\t\tReminder is due.")
+                print(f"\t\tReminder is due based on time.")
                 return True
         return False
