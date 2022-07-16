@@ -46,6 +46,8 @@ Resources:
         Variables:
           S3_BUCKET: "twilio-apps"
           S3_KEY_PREFIX: !Ref StackNamePrefix
+      Layers:
+        - !Ref TwilioLayer
       Events:
         HelloWorld:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
