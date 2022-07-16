@@ -49,12 +49,13 @@ class Twilio(IProcessingTexts):
         self._client = Client(twilio_acount_sid, twilio_auth_token)
 
     def send_text(self, phone_number: str, text: str) -> SMSText:
+        print(f"About to text {phone_number} with {text}")
         message = self._client.messages.create(
             body=text,
             from_="+19894655460",
             to=phone_number,
         )
-        print(message)
+        print(message.sid)
         return SMSText(phone_number, text, datetime.now().isoformat(), message.sid)
 
     def receive_text(self, raw_webhook_body: str) -> str:

@@ -50,9 +50,12 @@ class SMSCommandProcessor:
                 result_details=update_message,
             )
 
+        unknown_command_msg = f"⁉️ '{command.body}' is an unknown commmand."
+        self._twilio_client.send_text(command.from_phone_number, unknown_command_msg)
+
         return SMSCommandResult(
             timestamp=self._clock.get_time().isoformat(),
             command=command,
             result="error",
-            result_details=f"⁉️ '{command.body}' is an unknown commmand.",
+            result_details=unknown_command_msg,
         )
