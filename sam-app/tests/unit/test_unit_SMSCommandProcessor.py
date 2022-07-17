@@ -35,7 +35,7 @@ class SMSCommandProcessorUnitTests(unittest.TestCase):
         self.assertEqual(results.command.body, "done")
         self.assertEqual(results.result, "ok")
         self.assertEqual(
-            results.result_details, "✅ 'Take medicine' marked as done by +123456789."
+            results.result_details, "✅\nTake medicine marked as done by +123456789"
         )
 
     def test_should_handle_mixed_case(self):
@@ -63,7 +63,7 @@ class SMSCommandProcessorUnitTests(unittest.TestCase):
         self.assertEqual(results.command.body, "DONE")
         self.assertEqual(results.result, "ok")
         self.assertEqual(
-            results.result_details, "✅ 'Take medicine' marked as done by +123456789."
+            results.result_details, "✅\nTake medicine marked as done by +123456789"
         )
 
     def test_should_inactivate_reminder_record_when_done_sent(self):

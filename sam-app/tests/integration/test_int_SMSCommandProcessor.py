@@ -60,9 +60,6 @@ class SMSCommandProcessorIntTests(unittest.TestCase):
         # Assert
         self.assertEqual(results.command.body, "done")
         self.assertEqual(results.result, "ok")
-        self.assertEqual(
-            results.result_details, "✅ 'Take medicine' marked as done by +123456789."
-        )
 
 
 if __name__ == "__main__":

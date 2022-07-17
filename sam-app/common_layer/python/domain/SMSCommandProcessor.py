@@ -42,7 +42,8 @@ class SMSCommandProcessor:
                 last_set_to_done=self._clock.get_time().isoformat(),
             )
             self._s3_repo.save_reminder(done_reminder)
-            update_message = f"✅ '{done_reminder.name}' marked as done by {command.from_phone_number}."
+            update_message = f"""✅
+{done_reminder.name} marked as done by {command.from_phone_number}"""
             for phone_number in done_reminder.phone_numbers:
                 self._twilio_client.send_text(phone_number, update_message)
 

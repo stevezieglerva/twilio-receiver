@@ -40,7 +40,7 @@ class CommandAdapterUnitTests(unittest.TestCase):
         self.assertEqual(results.command.body, "done")
         self.assertEqual(results.result, "ok")
         self.assertEqual(
-            results.result_details, "✅ 'Take medicine' marked as done by +17039750614."
+            results.result_details, "✅\nTake medicine marked as done by +17039750614"
         )
 
 
