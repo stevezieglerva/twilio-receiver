@@ -82,8 +82,7 @@ Resources:
       Events:
         CronEvent:
           Properties:
-            Schedule:
-              !If [IsProd, "cron(1,16,31,46 * ? * * *)", "rate(2 minutes)"]
+            Schedule: !If [IsProd, "cron(1,31 * ? * * *)", "rate(2 minutes)"]
           Type: Schedule
 
   TwilioLayer:
